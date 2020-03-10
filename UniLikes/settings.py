@@ -26,7 +26,7 @@ SECRET_KEY = '0!d%(43oqf$3c98973krt7=4ej#1m&y(x=^%=n4n3+@+c&r7=b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['shielded-tor-17609.herokuapp.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -37,18 +37,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #'social_django',
     'votingapp',
-    'social_django',
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -66,7 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
+                #'social_django.context_processors.backends',
                 'django.template.context_processors.media',
             ],
         },
@@ -77,13 +79,12 @@ WSGI_APPLICATION = 'UniLikes.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'unilikes',
         'USER': 'postgres',
-        'PASSWORD': 'naxisucks',
+        'PASSWORD': 'lovepython',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -131,11 +132,14 @@ MEDIA_URL = '/media/'
 STATICFILES_DIRS = [
     STATIC_FILE
 ]
+import dj_database_url
 
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
 LOGIN_REDIRECT_URL = '/'
 
 SOCIAL_AUTH_POSTGRES_JSONFIELD = True
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',  # бекенд авторизации через ВКонтакте
     'django.contrib.auth.backends.ModelBackend',

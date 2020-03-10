@@ -1,0 +1,9 @@
+{% extends 'base_signup.html' %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="btn">Войти</button>
+</form>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base_signup.html' %}
+
+{% block heading %}Регайся, друг!{% endblock %}
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+</form>
+<button type="submit" text-center>Зарегистрироваться</button>
+{% endblock %}

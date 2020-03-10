@@ -1,0 +1,19 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UniLikes | ИТИС</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+   <link rel="stylesheet" href="{% static 'css/mystyle.css' %}">
+
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+{% include 'navbar.html' %}
+<h2>Привет, ИТИСовец!</h2>
+
+<a href="{% url 'voting-sign-out' %}">Выйти</a>
+
+</body>
+</html>

@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-# from firstapp import views
 from django.conf import settings
 from django.conf.urls.static import static
 from votingapp import views
@@ -23,13 +22,14 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
-                  path('', views.home, name='home'),
+                  #path('', views.home, name='home'),
                   path('voting/sign-in', auth_views.LoginView.as_view(template_name='voting/sign_in.html'),
                        name='voting-sign-up'),
                   path('voting/sign-out', auth_views.LogoutView.as_view(next_page='/'), name='voting-sign-out'),
-                  path('voting/', views.voting_home, name='voting-home'),
+                  path('', views.voting_home, name='voting-home'),
                   path('voting/sign-up', views.voting_sign_up, name='voting-sign-up'),
 
                   path('voting/teacher', views.teacher, name='teacher'),
+                  path('voting/account', views.account, name='account'),
                   path('', include('social_django.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
