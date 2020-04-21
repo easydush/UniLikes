@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block page %}
+    <h2>UniLikes</h2>
+
+    {% block  slidebar %}
+        Привет, {{ request.user.name  }}
+        <hr/>
+        <a href="{% url 'voting-account' %}">Profile</a>
+    {% endblock %}
+{% endblock %}
