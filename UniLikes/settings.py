@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from UniLikes import env
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_FILE = os.path.join(BASE_DIR, 'static')
@@ -21,12 +23,12 @@ STATIC_FILE = os.path.join(BASE_DIR, 'static')
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0!d%(43oqf$3c98973krt7=4ej#1m&y(x=^%=n4n3+@+c&r7=b'
+SECRET_KEY = env.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['shielded-tor-17609.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Application definition
 
@@ -37,11 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'social_django',
     'votingapp',
+    'bootstrap4',
+    'crispy_forms',
 
 ]
-
+DEBUG_PROPAGATE_EXCEPTIONS = False
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+BOOTSTRAP4 = {'include_jquery': True}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -50,7 +55,6 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -68,7 +72,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                #'social_django.context_processors.backends',
                 'django.template.context_processors.media',
             ],
         },
@@ -81,12 +84,8 @@ WSGI_APPLICATION = 'UniLikes.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'unilikes',
-        'USER': 'postgres',
-        'PASSWORD': 'lovepython',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -121,31 +120,15 @@ USE_L10N = True
 
 USE_TZ = True
 
+# LOGIN_REDIRECT_URL = reverse_lazy('votingapp:voting')
+LOGIN_URL = '/login/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
-STATICFILES_DIRS = [
-    STATIC_FILE
-]
-import dj_database_url
-
-db_from_env = dj_database_url.config()
-DATABASES['default'].update(db_from_env)
-LOGIN_REDIRECT_URL = '/'
-
-SOCIAL_AUTH_POSTGRES_JSONFIELD = True
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.vk.VKOAuth2',  # бекенд авторизации через ВКонтакте
-    'django.contrib.auth.backends.ModelBackend',
-    # бекенд классической аутентификации, чтобы работала авторизация через обычный логин и пароль
-)
-
-SOCIAL_AUTH_VK_OAUTH2_KEY = '7314245'
-SOCIAL_AUTH_VK_OAUTH2_SECRET = '1WdktOSrF7iOKx9NHm4F'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 AUTH_USER_MODEL = 'votingapp.Student'
