@@ -1,0 +1,21 @@
+{% block navbar %}
+    {% load static %}
+    <div class="d-flex flex-column flex-md-row align-items-center p-2 px-md-3 mb-2 bg-white border-bottom shadow-sm">
+
+{#        <img src="{% static 'votingapp/images/unilikes.png' %}" alt="UniLikes">#}
+        <nav class="my-2 my-md-0 mr-md-3 ">
+
+
+
+            {% if user.is_authenticated %}
+                <a class="btn btn-outline-success m-1"
+                   href="{% url 'main:profile' %}">Hello, {{ user.get_username }}</a>
+                <a class="btn btn-outline-danger" href="{% url 'votingapp:logout' %}">Log out</a>
+            {% else %}
+                <a class="btn btn-outline-success m-1" href="{% url 'votingapp:login' %}">Sign in</a>
+                <a class="btn btn-outline-primary" href="{% url 'votingapp:register' %}">Sign up</a>
+            {% endif %}
+        </nav>
+    </div>
+    </div>
+{% endblock %}

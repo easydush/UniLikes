@@ -1,9 +1,11 @@
 from django.contrib import admin
-from votingapp.models import Teacher, Subject, CourseSubject, Rate
+from votingapp.models import Teacher, Subject, TeacherSubjectCourse, Rate, Student
 
 # Register your models here.
 admin.site.register(Subject)
 admin.site.register(Rate)
+admin.site.register(Student)
+admin.site.register(TeacherSubjectCourse)
 
 
 @admin.register(Teacher)
@@ -12,8 +14,3 @@ class TeacherAdmin(admin.ModelAdmin):
     fields = ('surname', 'name')
     ordering = ['surname']
     search_fields = ['surname']
-
-
-@admin.register(CourseSubject)
-class CourseSubjectAdmin(admin.ModelAdmin):
-    filter_vertical = ['teacher']

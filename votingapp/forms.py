@@ -1,18 +1,26 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+
 from votingapp.models import Student, Rate, Teacher
+from votingapp.validators import validate_email
 
 
-class UserForm(forms.ModelForm):
-    username = forms.CharField(max_length=100, required=True)
-    password = forms.CharField(widget=forms.PasswordInput())
+class StudentForm(UserCreationForm):
+    email = forms.EmailField(validators=[validate_email])
 
     class Meta:
         model = Student
-        fields = ('username', 'password', 'course')
+        fields = ('email', 'course')
+
+
+''' password changing is available via celery from email
+there are no other changes, that's why there is no need in user change form'''
 
 
 class RateForm(forms.ModelForm):
-    teacher = forms.ModelChoiceField(queryset=Teacher.objects.all(), widget=forms.HiddenInput)
+    teachers = forms.ModelChoiceField(queryset=Teacher.objects.all(), widget=forms.HiddenInput)
+
+    # is it better to use signals?
 
     class Meta:
         model = Rate
