@@ -46,7 +46,7 @@ class Student(AbstractUser):
     course = models.IntegerField(
         choices=COURSE_CHOICES,
         default=1)
-    semesters = models.SlugField
+    semesters = models.SlugField(default='0', null=True, blank=True)
 
     def __str__(self):
         return f'{self.email[:self.email.index("@")]}, {self.course}'
@@ -73,9 +73,6 @@ class Teacher(models.Model):
     def __str__(self):
         return self.surname + ' ' + self.name + ' ' + self.second_name
 
-    def __rating__(self):
-        return Rate.objects.filter(teacher=self).aggregate(Avg('rate'))
-
 
 class TeacherSubjectCourse(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
@@ -83,7 +80,7 @@ class TeacherSubjectCourse(models.Model):
     semester = models.PositiveSmallIntegerField()
 
     def __str__(self):
-        return f'{self.subject.title}, {self.semester} курс'
+        return f'{self.subject.title}, {self.semester} семестр'
 
 
 class Rate(models.Model):

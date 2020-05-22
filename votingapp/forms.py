@@ -18,8 +18,6 @@ there are no other changes, that's why there is no need in user change form'''
 
 
 class RateForm(forms.ModelForm):
-    teachers = forms.ModelChoiceField(queryset=Teacher.objects.all(), widget=forms.HiddenInput)
-
     # is it better to use signals?
 
     class Meta:

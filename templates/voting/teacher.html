@@ -1,0 +1,33 @@
+
+
+<div class="container " id="profile" style=" width: 50%">
+
+    <div class="row">
+        {% if teacher.profile_photo %}
+            <div class="col-2">
+                <img src="{{ teacher.photo.url }}" alt="avatar" class="avatar"
+                     style="border-radius: 100px; width: 100px; height: 100px ">
+            </div>
+        {% endif %}
+
+        <div class="col">
+            <br/>
+            <h1>{{ teacher.surname }} {{ teacher.name }} {{ teacher.second_name }}</h1>
+        </div>
+
+
+    </div>
+    <br/>
+
+
+    <div class="row">
+        <h5>Subjects:</h5>
+    </div>
+    {% for subject in subjects %}
+        <div class="row">
+            <li>{{ subject.subject.title }} {{ subject.semester }}</li>
+        </div>
+    {% endfor %}
+
+
+</div>

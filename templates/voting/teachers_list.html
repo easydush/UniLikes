@@ -30,25 +30,12 @@
     {% load crispy_forms_tags %}
 
     <div class="container " id="profile" style=" width: 50%">
-
-        <div class="row">
-
-
-            <div class="col">
-                <br/>
-                <h1>{{ user.username }}</h1>
-            </div>
-
-
-        </div>
-        <br/>
-        {% if user.semesters %}
+        {% for teacher in teachers %}
             <div class="row">
-                <h3>Voted semesters: <i>{{ user.semesters }}</i>
+{#                {% include 'voting/teacher.html' %}#}
+            {{ teacher.surname }}
 
-                </h3>
             </div>
-        {% endif %}
-
+        {% endfor %}
     </div>
 {% endblock %}

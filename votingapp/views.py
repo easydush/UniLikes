@@ -1,14 +1,21 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ImproperlyConfigured
+from django.http import HttpResponseRedirect, request
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from django.utils.encoding import force_text
 from django.views import View
+from django.views.generic import ListView
+from django.views.generic.base import ContextMixin, TemplateResponseMixin
+from django.views.generic.edit import ProcessFormView, CreateView
 
 from votingapp.forms import RateForm, StudentForm
 from django.contrib.auth import authenticate, login, logout
-from votingapp.models import Student
+
+from votingapp.mixins import AjaxFormMixin
+from votingapp.models import Student, Teacher
 
 
 # Create your views here.
@@ -79,3 +86,13 @@ class LoginView(View):
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'voting/profile.html', {})
+
+
+class TeachersList(LoginRequiredMixin, View):
+    def get(self, request):
+        teachers = Teacher.objects.filter(teachersubjectcourse__semester=int(request.user.semesters[-1]) + 1)
+        return render(request, 'voting/teachers_list.html', {'teachers': teachers})
+
+
+class VoteView( CreateView):
+    pass

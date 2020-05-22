@@ -10,7 +10,6 @@ admin.site.register(TeacherSubjectCourse)
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
-    empty_value_display = 'it is empty'
-    fields = ('surname', 'name')
+    empty_value_display = 'no one'
     ordering = ['surname']
     search_fields = ['surname']
