@@ -9,7 +9,7 @@
 
             {% if user.is_authenticated %}
                 <a class="btn btn-outline-success m-1"
-                   href="{% url 'main:profile' %}">Hello, {{ user.get_username }}</a>
+                   href="{% url 'votingapp:profile' %}">Hello, {{ user.get_username }}</a>
                 <a class="btn btn-outline-danger" href="{% url 'votingapp:logout' %}">Log out</a>
             {% else %}
                 <a class="btn btn-outline-success m-1" href="{% url 'votingapp:login' %}">Sign in</a>

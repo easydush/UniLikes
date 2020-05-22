@@ -10,7 +10,7 @@ class StudentForm(UserCreationForm):
 
     class Meta:
         model = Student
-        fields = ('email', 'course')
+        fields = ('username', 'email', 'course')
 
 
 ''' password changing is available via celery from email

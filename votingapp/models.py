@@ -49,7 +49,7 @@ class Student(AbstractUser):
     semesters = models.SlugField
 
     def __str__(self):
-        return f'{self.email[:self.email.index("@") - 1]}, {self.course}'
+        return f'{self.email[:self.email.index("@")]}, {self.course}'
 
     class Meta:
         verbose_name = 'student'
