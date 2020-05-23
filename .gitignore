@@ -4,3 +4,5 @@ venv/**
 .git
 .idea
 staticfiles
+UniLikes/env.py
+*.sqlite3
