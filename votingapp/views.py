@@ -94,5 +94,9 @@ class TeachersList(LoginRequiredMixin, View):
         return render(request, 'voting/teachers_list.html', {'teachers': teachers})
 
 
-class VoteView( CreateView):
-    pass
+# class VoteView(CreateView):
+#     pass
+
+
+def vote_page(request):
+    return render(request, 'voting/voteTest.html')

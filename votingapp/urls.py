@@ -12,5 +12,5 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('about/', views.about, name='about'),
     path('teachers/', views.TeachersList.as_view(), name='teachers'),
-
+    path('testVote/', views.vote_page, name='voting'),
 ]
