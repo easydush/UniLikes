@@ -8,9 +8,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
     <script src="https://kit.fontawesome.com/b3dd33d684.js" crossorigin="anonymous"></script>
     <script
-  src="https://code.jquery.com/jquery-3.5.1.js"
-  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-  crossorigin="anonymous"></script>
+            src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block content %}
@@ -30,6 +30,13 @@
                 Плохо
             </div>
         </div>
+    </div>
+
+    <div class="card" id="card_template" style="display: none; z-index: 0">
+        <div class="teacher-image mt-3"
+             style="background-image: url(https://kpfu.ru/portal/docs/F926856215/mYnexRLID9o.jpg)"></div>
+        <h4 class="mt-3">Абрамский Михаил Михайлович</h4>
+        <p class="teacher-description mt-2">Информатика</p>
     </div>
 
     <script>
@@ -179,18 +186,22 @@
 
                     // check threshold
                     if (propX > 0.25 && e.direction == Hammer.DIRECTION_RIGHT) {
+
                         console.log('right');
+                        showStamp(like_stamp);
 
                         successful = true;
                         // get right border position
                         posX = this.board.clientWidth
 
                     } else if (propX < -0.25 && e.direction == Hammer.DIRECTION_LEFT) {
+
                         console.log('left');
+                        showStamp(dislike_stamp);
 
                         successful = true;
                         // get left border position
-                        posX = -(this.board.clientWidth + this.topCard.clientWidth)
+                        posX = -(this.board.clientWidth + this.topCard.clientWidth);
 
                     }
                     {#else if (propY < -0.25 && e.direction == Hammer.DIRECTION_UP) {#}
@@ -215,7 +226,7 @@
                             this.push();
                             // handle gestures on new top card
                             this.handle()
-                        }, 200)
+                        }, 400)
 
                     } else {
 
@@ -232,12 +243,19 @@
 
             push() {
 
-                let card = document.createElement('div');
 
-                card.classList.add('card');
+                let card = document.getElementById('card_template').cloneNode(true);
 
-                card.style.backgroundImage =
-                    "url('https://picsum.photos/500/700/?random=" + Math.round(Math.random() * 1000000) + "')";
+                card.style.display = 'block';
+
+
+                {#let card = document.createElement('div');#}
+                {##}
+                {#card.classList.add('card');#}
+                {##}
+                {#card.style.backgroundImage =#}
+                {#    "url('https://picsum.photos/500/700/?random=" + Math.round(Math.random() * 1000000) + "')";#}
+
                 card.style.transform =
                     'translateX(-50%) translateY(-50%) rotate(0deg) rotateY(0deg) scale(1)';
 
@@ -254,20 +272,21 @@
 
         let board = document.querySelector('#board');
 
-        let default_transform = 'translateX(-50%) translateY(-35%) rotate(0deg) rotateY(0deg) scale(1)';
+        let default_transform = 'translateX(-50%) translateY(-30%) rotate(0deg) rotateY(0deg) scale(1)';
 
         let carousel = new Carousel(board);
 
         let like_stamp = "#like-stamp";
         let dislike_stamp = "#dislike-stamp";
 
+
         let like = function () {
-            showStamp(like_stamp);
+            {#showStamp(like_stamp);#}
             change_card('right');
         };
 
         let dislike = function () {
-            showStamp(dislike_stamp);
+            {#showStamp(dislike_stamp);#}
             change_card('left')
         };
 
@@ -293,7 +312,7 @@
 
         };
 
-        let showStamp = function(type) {
+        let showStamp = function (type) {
             $(type).show();
             setTimeout(() => {
                 $(type).hide();
