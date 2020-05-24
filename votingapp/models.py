@@ -77,7 +77,7 @@ class Teacher(models.Model):
 class TeacherSubjectCourse(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    semester = models.PositiveSmallIntegerField()
+    semester = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return f'{self.subject.title}, {self.semester} семестр'
@@ -90,5 +90,15 @@ class Rate(models.Model):
         (1, '1'),
         (-1, '-1'),
         (0, '0')]
-    rate = models.PositiveSmallIntegerField(verbose_name='Rate', choices=RATE_CHOICES,
-                                            default=0)
+    # -1 means that it's not your teacher
+    rate = models.SmallIntegerField(verbose_name='Rate', choices=RATE_CHOICES,
+                                    default=0)
+
+
+class StudTeachRateFact(models.Model):
+    """Sounds bad, but this model is a guarantee for anonymous voting and defends user from
+    repeating vote. It's not linked to Rate, because of anonymous."""
+    timestamp = models.DateTimeField(auto_now_add=True)
+    teacher = models.ForeignKey(Teacher, verbose_name='Teacher', on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, verbose_name='Student', on_delete=models.CASCADE)
+    semester = models.PositiveSmallIntegerField(default=0)
