@@ -13,9 +13,13 @@
         <div class="buttons">
             <button onclick="like()">Like</button>
             <button onclick="dislike()">Dislike</button>
+{#            add onclick="not_stated()"#}
         </div>
     </div>
 
+{#    need to do something like select (onclick) for teacher and rate#}
+{#    rate values: 0 (dislike), 1(like), -1(not my teacher)#}
+{#    teacher_id is taken from query set named 'teachers'#}
     <script>
 
         class Carousel {
