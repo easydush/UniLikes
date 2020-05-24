@@ -6,17 +6,34 @@
     <link rel="stylesheet" href="{% static 'votingapp/css/voting.css' %}">
     {#    <script src="{% static 'votingapp/js/voting.js' %}"></script>#}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <script src="https://kit.fontawesome.com/b3dd33d684.js" crossorigin="anonymous"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block content %}
     <div id="board">
         <div class="buttons">
-            <button onclick="like()">Like</button>
-            <button onclick="dislike()">Dislike</button>
+            <div class="buttons-container">
+                <a class="mx-2 vote-button" id="dislike-button" href="#"><i class="far fa-frown"></i> Dislike</a>
+                <a class="mx-2 vote-button" id="meh-button" href="#"><i class="far fa-meh"></i> Not my teacher</a>
+                <a class="mx-2 vote-button" id="like-button" href="#"><i class="far fa-smile"></i> Like</a>
+            </div>
+        </div>
+        <div class="stamps">
+            <div class="stamp like-stamp" id="like-stamp">
+                Хорошо
+            </div>
+            <div class="stamp dislike-stamp" id="dislike-stamp">
+                Плохо
+            </div>
         </div>
     </div>
 
     <script>
+
 
         class Carousel {
 
@@ -108,10 +125,10 @@
                     if (this.nextCard) this.nextCard.style.transition = null;
 
                     // get top card coordinates in pixels
-                    let style = window.getComputedStyle(this.topCard)
-                    let mx = style.transform.match(/^matrix\((.+)\)$/)
-                    this.startPosX = mx ? parseFloat(mx[1].split(', ')[4]) : 0
-                    this.startPosY = mx ? parseFloat(mx[1].split(', ')[5]) : 0
+                    let style = window.getComputedStyle(this.topCard);
+                    let mx = style.transform.match(/^matrix\((.+)\)$/);
+                    this.startPosX = mx ? parseFloat(mx[1].split(', ')[4]) : 0;
+                    this.startPosY = mx ? parseFloat(mx[1].split(', ')[5]) : 0;
 
                     // get top card bounds
                     let bounds = this.topCard.getBoundingClientRect()
@@ -122,8 +139,11 @@
 
                 }
 
+                let action;
+
                 // calculate new coordinates
                 let posX = e.deltaX + this.startPosX;
+                console.log(posX);
                 let posY = e.deltaY + this.startPosY;
 
                 // get ratio between swiped pixels and the axes
@@ -134,10 +154,10 @@
                 let dirX = e.deltaX < 0 ? -1 : 1;
 
                 // calculate rotation, between 0 and +/- 45 deg
-                let deg = this.isDraggingFrom * dirX * Math.abs(propX) * 45
+                let deg = this.isDraggingFrom * dirX * Math.abs(propX) * 45;
 
                 // calculate scale ratio, between 95 and 100 %
-                let scale = (95 + (5 * Math.abs(propX))) / 100
+                let scale = (95 + (5 * Math.abs(propX))) / 100;
 
                 // move top card
                 this.topCard.style.transform =
@@ -238,15 +258,30 @@
 
         let carousel = new Carousel(board);
 
+        let like_stamp = "#like-stamp";
+        let dislike_stamp = "#dislike-stamp";
+
         let like = function () {
-            change_card();
+            showStamp(like_stamp);
+            change_card('right');
         };
 
         let dislike = function () {
-            change_card()
+            showStamp(dislike_stamp);
+            change_card('left')
         };
 
-        let change_card = function () {
+        let change_card = function (direction) {
+
+            let posX;
+
+            if (direction === 'left') {
+                posX = -1500;
+            } else {
+                posX = 1000;
+            }
+
+            carousel.topCard.style.transform = 'translateX(' + posX + 'px)';
             // wait transition end
             setTimeout(() => {
                 carousel.board.removeChild(carousel.topCard);
@@ -254,9 +289,23 @@
                 carousel.push();
                 // handle gestures on new top card
                 carousel.handle()
-            }, 200)
+            }, 400)
 
-        }
+        };
+
+        let showStamp = function(type) {
+            $(type).show();
+            setTimeout(() => {
+                $(type).hide();
+            }, 400)
+        };
+
+        $('#like-button').on('click', function () {
+            like()
+        });
+        $('#dislike-button').on('click', function () {
+            dislike()
+        });
 
     </script>
 

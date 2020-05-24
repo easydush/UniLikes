@@ -19,10 +19,52 @@
 }
 
 .buttons {
-    width: 500px;
+    width: 100%;
     text-align: center;
     position: absolute;
     top: 90%;
-    left: 35%;
     /*transform: translateX(-50%) translateY(-50%);*/
+}
+
+.buttons-container {
+    margin-left: auto;
+}
+
+.vote-button {
+    text-decoration: none;
+    font-size: 24px;
+}
+
+.vote-button:hover {
+    text-decoration: none;
+}
+
+.stamps {
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    top: 40%;
+}
+
+.stamp {
+    width: 180px;
+    font-size: 38px;
+    padding: 10px;
+    border: 4px solid;
+    border-radius: 15px;
+    user-select: none;
+}
+
+.like-stamp {
+    margin-left: 50%;
+    color: lightgreen;
+    transform: rotate(10deg);
+    display: none;
+}
+
+.dislike-stamp {
+    margin-left: 40%;
+    color: lightcoral;
+    transform: rotate(-10deg);
+    display: none;
 }
