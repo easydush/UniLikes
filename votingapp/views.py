@@ -6,6 +6,8 @@ from django.db.models import Q, F
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
+from django.views.generic import DetailView
+
 from votingapp.forms import RateForm, StudentForm
 from django.contrib.auth import authenticate, login, logout
 from votingapp.models import Student, Teacher, TeacherSubjectCourse, Rate, StudTeachRateFact
@@ -81,10 +83,17 @@ class ProfileView(LoginRequiredMixin, View):
         return render(request, 'voting/profile.html', {})
 
 
-class TeachersList(LoginRequiredMixin, View):
+class TeachersList(View):
+    # all teachers' page
     def get(self, request):
-        teachers = TeacherSubjectCourse.objects.all()
+        teachers = Teacher.objects.order_by('surname').all()
         return render(request, 'voting/teachers_list.html', {'teachers': teachers})
+
+
+class TeacherView(DetailView):
+    model = Teacher
+    template_name = 'voting/teacher_view.html'
+
 
 
 # class VoteView(CreateView):
@@ -113,3 +122,6 @@ def vote_result(request):
         r.save()
         rate_fact = StudTeachRateFact(student=request.user, teacher=teacher)
         rate_fact.save()
+
+# def top_teachers(request):
+#     teachers = Teacher.objects.ge

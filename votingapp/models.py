@@ -80,7 +80,7 @@ class TeacherSubjectCourse(models.Model):
     semester = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
-        return f'{self.subject.title}, {self.semester} семестр'
+        return f'{self.teacher.surname} | {self.subject.title}, {self.semester} семестр'
 
 
 class Rate(models.Model):
