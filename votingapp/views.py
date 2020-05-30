@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from django.db.models import Q, F
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -105,8 +106,8 @@ def vote_page(request):
     curr_sem = int(student.semesters[-1]) + 1
 
     # teachers = TeacherSubjectCourse.objects.all(
-        # Q(semester=curr_sem) & ~Q(studteachratefact__student=student)
-        # & ~Q(studteachratefact__semester=curr_sem))
+    # Q(semester=curr_sem) & ~Q(studteachratefact__student=student)
+    # & ~Q(studteachratefact__semester=curr_sem))
     # )
     # if not teachers:
     #     student.update(semesters=F('semesters') + str(curr_sem))
@@ -129,6 +130,7 @@ def vote_result(request):
     # result handler for AJAX in voting
     rate = request.POST.get('rate')
     print(request.POST)
+    print(request.content_params)
     if rate != -1:
         teacher_id = request.POST.get('teacher_id')
         # teacher = Teacher.objects.get(id=request.POST.get('teacher_id'))
@@ -137,6 +139,7 @@ def vote_result(request):
         # r.save()
         # rate_fact = StudTeachRateFact(student=request.user, teacher=teacher)
         # rate_fact.save()
+        return HttpResponse(status=200)
 
 # def top_teachers(request):
 #     teachers = Teacher.objects.ge
