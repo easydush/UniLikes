@@ -69,6 +69,11 @@ class Teacher(models.Model):
     second_name = models.CharField(max_length=30, verbose_name='Second name')
     photo = models.ImageField(verbose_name='Photo', upload_to='votingapp/teacher/photos', default='defaulteacher.jpg',
                               blank=True)
+    # todo: delete this field
+    photo_url = models.URLField(null=True)
+
+    def full_name(self):
+        return "%s %s %s" % (self.surname, self.name, self.second_name)
 
     def __str__(self):
         return self.surname + ' ' + self.name + ' ' + self.second_name
