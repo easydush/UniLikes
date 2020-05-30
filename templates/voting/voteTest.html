@@ -8,7 +8,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
     <script src="https://kit.fontawesome.com/b3dd33d684.js" crossorigin="anonymous"></script>
     <script src="{% static 'votingapp/js/JQuery/jquery.js' %}"></script>
-    <script src="{% static 'votingapp/js/send_ajax.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -19,7 +18,7 @@
         <div class="buttons">
             <div class="buttons-container">
                 <a class="mx-2 vote-button" id="dislike-button" href="#"><i class="far fa-frown"></i> Dislike</a>
-                <a class="mx-2 vote-button" id="meh-button" href="#"><i class="far fa-meh"></i> Not my teacher</a>
+                <a class="mx-2 vote-button" id="dont-know-button" href="#"><i class="far fa-meh"></i> Not my teacher</a>
                 <a class="mx-2 vote-button" id="like-button" href="#"><i class="far fa-smile"></i> Like</a>
             </div>
         </div>
@@ -29,6 +28,9 @@
             </div>
             <div class="stamp dislike-stamp" id="dislike-stamp">
                 Плохо
+            </div>
+            <div class="stamp dont-know-stamp" id="dont-know-stamp">
+                Не знаю
             </div>
         </div>
     </div>
@@ -60,10 +62,10 @@
         let vote;
         let teacher_id;
         let csrf_token;
-        {#var vote_ready = {val: false};#}
 
         let like_stamp = "#like-stamp";
         let dislike_stamp = "#dislike-stamp";
+        let dont_know_stamp = '#dont-know-stamp';
 
         class Carousel {
 
@@ -205,30 +207,25 @@
                     // check threshold
                     if (propX > 0.25 && e.direction == Hammer.DIRECTION_RIGHT) {
 
-                        console.log('right');
                         like();
-                        {#showStamp(like_stamp);#}
-
                         successful = true;
                         // get right border position
                         posX = this.board.clientWidth
 
                     } else if (propX < -0.25 && e.direction == Hammer.DIRECTION_LEFT) {
-                        console.log('left');
-                        dislike();
-                        {#showStamp(dislike_stamp);#}
 
+                        dislike();
                         successful = true;
                         // get left border position
                         posX = -(this.board.clientWidth + this.topCard.clientWidth);
+                    } else if (propY < -0.25 && e.direction == Hammer.DIRECTION_UP) {
+
+                        not_my_teacher();
+                        successful = true;
+                        // get top border position
+                        posY = -(this.board.clientHeight + this.topCard.clientHeight)
+
                     }
-                    {#else if (propY < -0.25 && e.direction == Hammer.DIRECTION_UP) {#}
-
-                    {#successful = true#}
-                    {#// get top border position#}
-                    {#posY = -(this.board.clientHeight + this.topCard.clientHeight)#}
-
-                    {# } #}
 
                     if (successful) {
                         // throw card in the chosen direction
@@ -272,32 +269,15 @@
 
         function send_vote(vote, teacher_id, csrf_token) {
             var xhttp = new XMLHttpRequest();
+            var csrf = $("input[name=csrfmiddlewaretoken]").val()
             xhttp.open("POST", "{% url 'votingapp:vote_result' %}", true);
-            xhttp.send("rate=" + vote + "&teacher_id=" + teacher_id + "&csrfmiddlewaretoken=" + csrf_token);
-         }
-
-        function getCookie(name) {
-            let matches = document.cookie.match(new RegExp(
-                "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-            ));
-            return matches ? decodeURIComponent(matches[1]) : undefined;
+            xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            {#xhttp.send("csrfmiddlewaretoken=" + csrf_token +"&rate=" + vote + "&teacher_id=" + teacher_id);#}
+            xhttp.send('csrfmiddlewaretoken=' + csrf_token + '&rate=' + vote + '&teacher_id=' + teacher_id)
         }
 
-        {# логика отправки ajax с jquery, не работает, ругается #}
-        {#function send_vote() {#}
-        {#    $.ajax({#}
-        {#        url: "{% url 'votingapp:vote_result' %}",#}
-        {#        data: {#}
-        {#            rate: vote,#}
-        {#            teacher_id: teacher_id,#}
-        {#            csrfmiddlewaretoken: csrf_token,#}
-        {#        },#}
-        {#        dataType: 'json',#}
-        {#    });#}
-        {#};#}
-
         {# показывает "штамп" на 400 миллисекунд #}
-        let showStamp = function (type) {
+        let show_stamp = function (type) {
             $(type).show();
             setTimeout(() => {
                 $(type).hide();
@@ -309,29 +289,43 @@
         let like = function () {
             teacher_id = carousel.topCard.getElementsByTagName("input")[1].value;
             vote = 1;
-            csrf_token = '{{ csrf_token }}';
+            csrf_token = $("input[name=csrfmiddlewaretoken]").val();
             send_vote(vote, teacher_id, csrf_token);
-            {#vote_ready = true;#}
-            showStamp(like_stamp);
+            show_stamp(like_stamp);
         };
 
         {# логика обработки "дизлайка", показывает "штамп" с оценкой. тут должна быть логика отправки запроса с оценкой 0 #}
         let dislike = function () {
-            showStamp(dislike_stamp);
+            teacher_id = carousel.topCard.getElementsByTagName("input")[1].value;
+            vote = 0;
+            csrf_token = $("input[name=csrfmiddlewaretoken]").val();
+            send_vote(vote, teacher_id, csrf_token);
+            show_stamp(dislike_stamp);
+        };
+
+        let not_my_teacher = function () {
+            teacher_id = carousel.topCard.getElementsByTagName("input")[1].value;
+            vote = -1;
+            csrf_token = $("input[name=csrfmiddlewaretoken]").val();
+            send_vote(vote, teacher_id, csrf_token);
+            show_stamp(dont_know_stamp);
         };
 
         {# сдвигает карточку в сторону в зависимотси от направления, заменяет ручной свайп для кнопок#}
         let change_card = function (direction) {
 
             let posX;
+            let posY = 0;
 
             if (direction === 'left') {
                 posX = -1500;
-            } else {
+            } else if (direction === 'right') {
                 posX = 1000;
+            } else if (direction === 'up') {
+                posY = 1000;
             }
 
-            carousel.topCard.style.transform = 'translateX(' + posX + 'px) translateY(30px)';
+            carousel.topCard.style.transform = 'translateX(' + posX + 'px) translateY(' + posY +' px)';
             // wait transition end
             setTimeout(() => {
                 carousel.board.removeChild(carousel.topCard);
@@ -343,20 +337,6 @@
 
         };
 
-
-        {#$('#teacher'+(iter-2)).bind('click', function () {#}
-        {#    console.log('clicked')#}
-        {#    $("#teacher" + (iter-2)).bind('mouseup', function () {#}
-        {#        console.log('released');#}
-        {#         if (vote_ready.val) {#}
-        {#            console.log(vote_ready);#}
-        {#            send_vote();#}
-        {#            vote_ready = false;#}
-        {#            console.log(vote_ready)#}
-        {#        }#}
-        {#    });#}
-        {# });#}
-
         {# обработка нажатия на кнопки лайк и дизлайк #}
         $('#like-button').on('click', function () {
             like();
@@ -366,6 +346,10 @@
         $('#dislike-button').on('click', function () {
             dislike();
             change_card('left');
+        });
+        $('#dont-know-button').on('click', function () {
+            not_my_teacher();
+            change_card('up');
         });
 
     </script>

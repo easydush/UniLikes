@@ -84,3 +84,10 @@
     transform: rotate(-10deg);
     display: none;
 }
+
+.dont-know-stamp {
+    margin-top: 5%;
+    margin-left: 45%;
+    color: #5b80b2;
+    display: none;
+}
