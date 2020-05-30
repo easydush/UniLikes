@@ -3,16 +3,21 @@
     UniLikes | Login
 {% endblock %}
 {% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'votingapp/css/index.css' %}">
+{% endblock %}
 {% block content %}
+    <main class="container">
+        {% load crispy_forms_tags %}
 
-    {% load crispy_forms_tags %}
-
-    <div class="container "  id="login_form" style=" width: 50%">
-        <form method="post">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <button type="submit" class="btn btn-primary">Login</button>
-            <a href="reset">Reset password</button>
-        </form>
-    </div>
+        <div class="container mt-5" id="login_form" style=" width: 50%">
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-primary">Login</button>
+                <a class="ml" href="reset">Reset password</a>
+            </form>
+        </div>
+    </main>
 {% endblock %}
