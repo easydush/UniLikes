@@ -13,5 +13,6 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('teachers/', views.TeachersList.as_view(), name='teachers'),
     path('testVote/', views.vote_page, name='voting'),
-    path('sendVote/', views.vote_result, name='vote_result')
+    path('sendVote/', views.vote_result, name='vote_result'),
+
 ]

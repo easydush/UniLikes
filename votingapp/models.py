@@ -13,35 +13,6 @@ COURSE_CHOICES = [
 ]
 
 
-# class StudentManager(BaseUserManager):
-#     use_in_migrations = True
-#
-#     def _create_user(self, email, password, **extra_fields):
-#         """
-#         Creates and saves a User with the given email and password.
-#         """
-#         if not email:
-#             raise ValueError('The given email must be set')
-#
-#         email = self.normalize_email(email)
-#         user = self.model(email=email, **extra_fields)
-#         user.set_password(password)
-#         user.save(using=self._db)
-#         return user
-#
-#     def create_user(self, email, password, **extra_fields):
-#         extra_fields.setdefault('is_superuser', False)
-#         return self._create_user(email, password, **extra_fields)
-#
-#     def create_superuser(self, email, password, **extra_fields):
-#         extra_fields.setdefault('is_superuser', True)
-#
-#         if extra_fields.get('is_superuser') is not True:
-#             raise ValueError('Superuser must have is_superuser=True.')
-#
-#         return self._create_user(email, password, **extra_fields)
-
-
 class Student(AbstractUser):
     course = models.IntegerField(
         choices=COURSE_CHOICES,
@@ -70,7 +41,7 @@ class Teacher(models.Model):
     photo = models.ImageField(verbose_name='Photo', upload_to='votingapp/teacher/photos', default='defaulteacher.jpg',
                               blank=True)
     # todo: delete this field
-    photo_url = models.URLField(null=True)
+    #photo_url = models.URLField(null=True)
 
     def full_name(self):
         return "%s %s %s" % (self.surname, self.name, self.second_name)

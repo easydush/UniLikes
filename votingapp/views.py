@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
-from django.db.models import Q, F
+from django.db.models import Q, F, Avg
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -17,7 +17,9 @@ from votingapp.models import Student, Teacher, TeacherSubjectCourse, Rate, StudT
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html', {})
+    teachers = Rate.objects.values('teacher').annotate(rating=Avg('rate'))[:3]
+    print(teachers)
+    return render(request, 'index.html', {'teachers': teachers})
 
 
 def about(request):
@@ -103,26 +105,13 @@ class TeacherView(DetailView):
 @login_required
 def vote_page(request):
     student = Student.objects.get(username=request.user.username)
-    curr_sem = int(student.semesters[-1]) + 1
+    curr_semester = int(student.semesters[-1]) + 1
+    voted_teachers = list(
+        StudTeachRateFact.objects.filter(Q(semester=curr_semester) & Q(student=student)).only('teacher'))
+    voted_teachers = [x.teacher for x in voted_teachers]
+    teachers = Teacher.objects.filter(teachersubjectcourse__semester=curr_semester)
+    teachers = filter(lambda x: x not in voted_teachers, teachers)
 
-    # teachers = TeacherSubjectCourse.objects.all(
-    # Q(semester=curr_sem) & ~Q(studteachratefact__student=student)
-    # & ~Q(studteachratefact__semester=curr_sem))
-    # )
-    # if not teachers:
-    #     student.update(semesters=F('semesters') + str(curr_sem))
-    #     student.save()
-    teacher1 = Teacher(surname="Абрамский", name="Михаил", second_name="Михайлович",
-                       photo_url="https://kpfu.ru/portal/docs/F926856215/mYnexRLID9o.jpg")
-    teacher2 = Teacher(surname="Ференец", name="Александр", second_name="Андреевич",
-                       photo_url="https://shelly.kpfu.ru/e-ksu/docs/F921457479/avatar001.png?rnd=8105")
-    subject = Subject(title="Информатика")
-    teacher_subject1 = TeacherSubjectCourse(teacher=teacher1, subject=subject)
-    teacher_subject2 = TeacherSubjectCourse(teacher=teacher2, subject=subject)
-    teachers = []
-    for i in range(5):
-        teachers.append(teacher_subject1)
-        teachers.append(teacher_subject2)
     return render(request, 'voting/voteTest.html', {'teachers': teachers})
 
 
@@ -140,6 +129,3 @@ def vote_result(request):
         # rate_fact = StudTeachRateFact(student=request.user, teacher=teacher)
         # rate_fact.save()
         return HttpResponse(status=200)
-
-# def top_teachers(request):
-#     teachers = Teacher.objects.ge
