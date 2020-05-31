@@ -11,44 +11,45 @@
 {% endblock %}
 
 {% block content %}
-    {% for teacher in teachers %}
-        {{ teacher.name }}
-    {% endfor %}
-    <div id="board">
-        <div class="buttons">
-            <div class="buttons-container">
-                <a class="mx-2 vote-button" id="dislike-button" href="#"><i class="far fa-frown"></i> Dislike</a>
-                <a class="mx-2 vote-button" id="dont-know-button" href="#"><i class="far fa-meh"></i> Not my teacher</a>
-                <a class="mx-2 vote-button" id="like-button" href="#"><i class="far fa-smile"></i> Like</a>
-            </div>
-        </div>
-        <div class="stamps">
-            <div class="stamp like-stamp" id="like-stamp">
-                Хорошо
-            </div>
-            <div class="stamp dislike-stamp" id="dislike-stamp">
-                Плохо
-            </div>
-            <div class="stamp dont-know-stamp" id="dont-know-stamp">
-                Не знаю
-            </div>
-        </div>
-    </div>
-
-    {#    card template#}
     {% if teachers %}
-        {% for teacher_sub in teachers %}
-            <div class="card" id="teacher{{ forloop.counter0 }}" style="display: none; z-index: 0">
-                <div class="teacher-image mt-3"
-                        {#                     style="background-image: url(https://kpfu.ru/portal/docs/F926856215/mYnexRLID9o.jpg)"></div>#}
-                     style="background-image: url({{ teacher_sub.teacher.photo_url }})"></div>
-                {#                <p class="teacher-id" hidden>{{ teacher_sub.teacher_id }}</p>#}
-                {% csrf_token %}
-                <input type="text" class="teacher-id" hidden value="{{ forloop.counter0 }}">
-                <h4 class="mt-3 teacher-name">{{ teacher_sub.teacher.full_name }}</h4>
-                <p class="teacher-description teacher-subject mt-2">{{ teacher_sub.subject.title }}</p>
+        <div id="board">
+            <div class="buttons">
+                <div class="buttons-container">
+                    <a class="mx-2 vote-button" id="dislike-button" href="#"><i class="far fa-frown"></i> Dislike</a>
+                    <a class="mx-2 vote-button" id="dont-know-button" href="#"><i class="far fa-meh"></i> Not my teacher</a>
+                    <a class="mx-2 vote-button" id="like-button" href="#"><i class="far fa-smile"></i> Like</a>
+                </div>
             </div>
-        {% endfor %}
+            <div class="stamps">
+                <div class="stamp like-stamp" id="like-stamp">
+                    Хорошо
+                </div>
+                <div class="stamp dislike-stamp" id="dislike-stamp">
+                    Плохо
+                </div>
+                <div class="stamp dont-know-stamp" id="dont-know-stamp">
+                    Не знаю
+                </div>
+            </div>
+        </div>
+
+        {#    card template#}
+        {% if teachers %}
+            {% for teacher_sub in teachers %}
+                <div class="card" id="teacher{{ forloop.counter0 }}" style="display: none; z-index: 0">
+                    <div class="teacher-image mt-3"
+                            {#                     style="background-image: url(https://kpfu.ru/portal/docs/F926856215/mYnexRLID9o.jpg)"></div>#}
+                         style="background-image: url({{ teacher_sub.teacher.photo_url }})"></div>
+                    {#                <p class="teacher-id" hidden>{{ teacher_sub.teacher_id }}</p>#}
+                    {% csrf_token %}
+                    <input type="text" class="teacher-id" hidden value="{{ forloop.counter0 }}">
+                    <h4 class="mt-3 teacher-name">{{ teacher_sub.teacher.full_name }}</h4>
+                    <p class="teacher-description teacher-subject mt-2">{{ teacher_sub.subject.title }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% else %}
+
     {% endif %}
 
     <script type="text/javascript">
@@ -325,7 +326,7 @@
                 posY = 1000;
             }
 
-            carousel.topCard.style.transform = 'translateX(' + posX + 'px) translateY(' + posY +' px)';
+            carousel.topCard.style.transform = 'translateX(' + posX + 'px) translateY(' + posY + ' px)';
             // wait transition end
             setTimeout(() => {
                 carousel.board.removeChild(carousel.topCard);
