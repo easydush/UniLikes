@@ -1,22 +1,23 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm, Form, EmailField, CharField, PasswordInput
 
 from votingapp.models import Student, Rate, Teacher
 from votingapp.validators import validate_email
 
 
-class StudentForm(ModelForm):
+class StudentForm(UserCreationForm):
     email = forms.EmailField(validators=[validate_email])
 
     class Meta:
         model = Student
-        fields = ('username', 'email', 'course')
+        fields = ('username', 'password1', 'password2', 'email', 'course')
 
     def save(self, commit=True):
         user = super(StudentForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password"])
+        user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
         return user

@@ -52,15 +52,51 @@ def error_500(request):
     return render(request, '500.html', {})
 
 
-class RegistrationView(CreateView):
-    form_class = StudentForm
-    template_name = 'voting/registration.html'
-    success_url = reverse_lazy('votingapp:login')
+class RegisterView(View):
+    def get(self, request):
+        return render(request, 'voting/registration.html', {'form': StudentForm()})
+
+    def post(self, request):
+        form = StudentForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save(True)
+            form.save_m2m()
+            return redirect(reverse('votingapp:login'))
+
+        return render(request, 'voting/registration.html', {'form': form})
 
 
-class LoginView(LoginView):
-    template_name = 'voting/login.html'
-    success_url = reverse_lazy('votingapp:profile')
+class StudLoginView(View):
+    def get(self, request):
+        return render(request, 'voting/login.html', {'form': AuthenticationForm})
+
+    def post(self, request):
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = authenticate(
+                request,
+                username=form.cleaned_data.get('username'),
+                password=form.cleaned_data.get('password')
+            )
+
+            if user is None:
+                return render(
+                    request,
+                    'voting/login.html',
+                    {'form': form, 'invalid_creds': True}
+                )
+
+            try:
+                form.confirm_login_allowed(user)
+            except ValidationError:
+                return render(
+                    request,
+                    'voting/login.html',
+                    {'form': form, 'invalid_creds': True}
+                )
+            login(request, user)
+
+            return redirect(reverse('votingapp:profile'))
 
 
 class ResetPasswordRequestView(FormView):

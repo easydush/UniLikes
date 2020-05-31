@@ -124,7 +124,7 @@ USE_L10N = True
 USE_TZ = True
 
 # LOGIN_REDIRECT_URL = reverse_lazy('votingapp:voting')
-LOGIN_URL = '/login/'
+LOGIN_URL = 'votingapp:login'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
@@ -136,7 +136,7 @@ MEDIA_URL = '/media/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 AUTH_USER_MODEL = 'votingapp.Student'
 
-LOGOUT_REDIRECT_URL = reverse_lazy('votinapp:login')
+LOGOUT_REDIRECT_URL = reverse_lazy('votingapp:login')
 
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 
