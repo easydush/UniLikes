@@ -38,10 +38,8 @@ class Teacher(models.Model):
     surname = models.CharField(max_length=30, verbose_name='Surname')
     name = models.CharField(max_length=30, verbose_name='Name')
     second_name = models.CharField(max_length=30, verbose_name='Second name')
-    photo = models.ImageField(verbose_name='Photo', upload_to='votingapp/teacher/photos', default='defaulteacher.jpg',
-                              blank=True)
-    # todo: delete this field
-    #photo_url = models.URLField(null=True)
+    photo_url = models.URLField(null=True,
+                                default='https://secure.gravatar.com/avatar/0fb68a3652b2d19b550a3fca1e71d9cc?s=4729128&d=mm')
 
     def full_name(self):
         return "%s %s %s" % (self.surname, self.name, self.second_name)
@@ -70,6 +68,9 @@ class Rate(models.Model):
     rate = models.SmallIntegerField(verbose_name='Rate', choices=RATE_CHOICES,
                                     default=0)
 
+    def __str__(self):
+        return f'{self.timestamp}|{self.rate} for {self.teacher.surname}'
+
 
 class StudTeachRateFact(models.Model):
     """Sounds bad, but this model is a guarantee for anonymous voting and defends user from
@@ -78,3 +79,6 @@ class StudTeachRateFact(models.Model):
     teacher = models.ForeignKey(Teacher, verbose_name='Teacher', on_delete=models.CASCADE)
     student = models.ForeignKey(Student, verbose_name='Student', on_delete=models.CASCADE)
     semester = models.PositiveSmallIntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.student.username} voted for {self.teacher.surname} in {self.semester} semester'

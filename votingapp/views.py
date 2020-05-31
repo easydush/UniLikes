@@ -2,24 +2,38 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
-from django.db.models import Q, F, Avg
+from django.db.models import Q, Avg
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView
-from django.views.decorators.csrf import csrf_exempt
 
-from votingapp.forms import RateForm, StudentForm
+from votingapp.forms import StudentForm
 from django.contrib.auth import authenticate, login, logout
 from votingapp.models import Student, Teacher, TeacherSubjectCourse, Rate, StudTeachRateFact, Subject
 
 
 # Create your views here.
 def index(request):
-    teachers = Rate.objects.values('teacher').annotate(rating=Avg('rate'))[:3]
-    print(teachers)
-    return render(request, 'index.html', {'teachers': teachers})
+    teachers = list(Rate.objects.values('teacher').annotate(rating=Avg('rate') * 100)[:3])
+
+    teachers = sorted(teachers, key=lambda x: x['rating'], reverse=True)
+    teacher1 = Teacher.objects.get(id=teachers[0]['teacher'])
+    rating1 = int(teachers[0]['rating'])
+    teacher2 = Teacher.objects.get(id=teachers[1]['teacher'])
+    rating2 = int(teachers[1]['rating'])
+    teacher3 = Teacher.objects.get(id=teachers[2]['teacher'])
+    rating3 = int(teachers[2]['rating'])
+    print(rating2)
+
+    return render(request, 'index.html', {'teacher1': teacher1,
+                                          'rating1': rating1,
+                                          'teacher2': teacher2,
+                                          'rating2': rating2,
+                                          'teacher3': teacher3,
+                                          'rating3': rating3,
+                                          })
 
 
 def about(request):
@@ -99,9 +113,6 @@ class TeacherView(DetailView):
     template_name = 'voting/teacher_view.html'
 
 
-# class VoteView(CreateView):
-#     pass
-
 @login_required
 def vote_page(request):
     student = Student.objects.get(username=request.user.username)
@@ -110,22 +121,29 @@ def vote_page(request):
         StudTeachRateFact.objects.filter(Q(semester=curr_semester) & Q(student=student)).only('teacher'))
     voted_teachers = [x.teacher for x in voted_teachers]
     teachers = Teacher.objects.filter(teachersubjectcourse__semester=curr_semester)
-    teachers = filter(lambda x: x not in voted_teachers, teachers)
+
+    teachers = [{'teacher': x, 'subjects': set(Subject.objects.filter(teachersubjectcourse__teacher=x))} for x in
+                teachers if
+                x not in voted_teachers]
+
+    if not teachers:
+        Student.objects.filter(pk=student.pk).update(semesters=student.semesters + curr_semester)
+    print(teachers)
 
     return render(request, 'voting/voteTest.html', {'teachers': teachers})
 
 
 def vote_result(request):
+    student = Student.objects.get(username=request.user.username)
+    teacher = Teacher.objects.get(id=request.POST.get('teacher_id'))
+    curr_semester = int(student.semesters[-1]) + 1
     # result handler for AJAX in voting
     rate = request.POST.get('rate')
-    print(request.POST)
     print(request.content_params)
+    print(teacher, rate)
+    rate_fact = StudTeachRateFact(student=student, teacher=teacher)
+    rate_fact.save()
     if rate != -1:
-        teacher_id = request.POST.get('teacher_id')
-        # teacher = Teacher.objects.get(id=request.POST.get('teacher_id'))
-        print(teacher_id, rate)
-        # r = Rate(teacher=teacher, rate=rate)
-        # r.save()
-        # rate_fact = StudTeachRateFact(student=request.user, teacher=teacher)
-        # rate_fact.save()
-        return HttpResponse(status=200)
+        r = Rate(teacher=teacher, rate=rate)
+        r.save()
+    return HttpResponse(status=200)
