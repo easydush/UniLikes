@@ -16,16 +16,7 @@
 {% block content %}
     <main>
         {% if teachers %}
-            <div id="board">
-                <div class="buttons">
-                    <div class="buttons-container">
-                        <a class="mx-2 vote-button" id="dislike-button" href="#"><i class="far fa-frown"></i> Не
-                            удовлетворен</a>
-                        <a class="mx-2 vote-button" id="dont-know-button" href="#"><i class="far fa-meh"></i> Не мой
-                            преподаватель</a>
-                        <a class="mx-2 vote-button" id="like-button" href="#"><i class="far fa-smile"></i> Удовлетворен</a>
-                    </div>
-                </div>
+            <div id="board" class="board">
                 <div class="stamps">
                     <div class="stamp like-stamp" id="like-stamp">
                         Хорошо
@@ -38,6 +29,15 @@
                     </div>
                 </div>
             </div>
+            <div class="buttons">
+                    <div class="buttons-container">
+                        <a class="mx-2 vote-button" id="dislike-button" href="#"><i class="far fa-frown"></i> Не
+                            удовлетворен</a>
+                        <a class="mx-2 vote-button" id="dont-know-button" href="#"><i class="far fa-meh"></i> Не мой
+                            преподаватель</a>
+                        <a class="mx-2 vote-button" id="like-button" href="#"><i class="far fa-smile"></i> Удовлетворен</a>
+                    </div>
+                </div>
 
             {#    card template#}
             {% if teachers %}
