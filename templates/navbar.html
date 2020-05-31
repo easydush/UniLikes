@@ -1,29 +1,31 @@
 {% block navbar %}
     {% load static %}
-        <nav class="navbar my-2 my-md-0 mr-md-3 p-2 py-3 px-md-3 bg-white border-bottom shadow-sm">
-            <div class="container-fluid">
+    <nav class="navbar my-2 my-md-0 mr-md-3 p-2 py-3 px-md-3 bg-white border-bottom shadow-sm">
+        <div class="container-fluid">
 
-                <a class="navbar-brand" href={% url 'votingapp:index' %}>
+            <a class="navbar-brand" href={% url 'votingapp:index' %}>
 
-                    <img src="{% static 'votingapp/images/unilikes.png' %}" width="250" height="40"
-                         class="d-inline-block d-sm-none d-md-inline align-top" alt="ITIS_logo">
-                </a>
-                {% if user.is_authenticated %}
-                    <a class="btn btn-outline-success m-1 mr-auto"
-                           href="{% url 'votingapp:voting' %}">Голосовать</a>
-                    <div>
-                        <a class="btn btn-outline-success m-1 mr-sm-2"
-                           href="{% url 'votingapp:profile' %}">Привет, {{ user.get_username }}</a>
-                        <a class="btn btn-outline-danger" href="{% url 'votingapp:logout' %}">Выйти</a>
-                    </div>
-                {% else %}
-                    <div class="mr-sm-2">
-                        <a class="btn btn-outline-success m-1 mr-sm-2" href="{% url 'votingapp:login' %}">Войти</a>
-                        <a class="btn btn-outline-primary" href="{% url 'votingapp:register' %}">Зарегистрироваться</a>
-                    </div>
-                {% endif %}
+                <img src="{% static 'votingapp/images/unilikes2.png' %}" height="45"
+                     class="d-inline-block d-sm-none d-md-inline align-top" alt="ITIS_logo">
+            </a>
+            {% if user.is_authenticated %}
+                <a class="btn btn-outline-success m-1"
+                   href="{% url 'votingapp:voting' %}">Голосовать</a>
+                <a class="btn btn-outline-success m-1 ml-2 mr-auto"
+                   href="{% url 'votingapp:teachers' %}">Преподаватели</a>
+                <div>
+                    <a class="btn btn-outline-success m-1 mr-sm-2"
+                       href="{% url 'votingapp:profile' %}">Привет, {{ user.get_username }}</a>
+                    <a class="btn btn-outline-danger" href="{% url 'votingapp:logout' %}">Выйти</a>
+                </div>
+            {% else %}
+                <div class="mr-sm-2">
+                    <a class="btn btn-outline-success m-1 mr-sm-2" href="{% url 'votingapp:login' %}">Войти</a>
+                    <a class="btn btn-outline-primary" href="{% url 'votingapp:register' %}">Зарегистрироваться</a>
+                </div>
+            {% endif %}
 
-            </div>
-        </nav>
-{#    </div>#}
+        </div>
+    </nav>
+    {#    </div>#}
 {% endblock %}

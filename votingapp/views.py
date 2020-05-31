@@ -105,6 +105,8 @@ class TeachersList(View):
     # all teachers' page
     def get(self, request):
         teachers = Teacher.objects.order_by('surname').all()
+        teachers = [{'teacher': x, 'subjects': set(Subject.objects.filter(teachersubjectcourse__teacher=x))}
+                    for x in teachers]
         return render(request, 'voting/teachers_list.html', {'teachers': teachers})
 
 

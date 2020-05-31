@@ -54,3 +54,13 @@ pre {
 .title_for_info {
     color: #0f6674;
 }
+
+.avatar {
+    display: block;
+    max-height: 150px;
+    width: auto;
+    height: 150px;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
