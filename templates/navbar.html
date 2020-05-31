@@ -10,16 +10,16 @@
                 </a>
                 {% if user.is_authenticated %}
                     <a class="btn btn-outline-success m-1 mr-auto"
-                           href="{% url 'votingapp:voting' %}">Vote</a>
+                           href="{% url 'votingapp:voting' %}">Голосовать</a>
                     <div>
                         <a class="btn btn-outline-success m-1 mr-sm-2"
-                           href="{% url 'votingapp:profile' %}">Hello, {{ user.get_username }}</a>
-                        <a class="btn btn-outline-danger" href="{% url 'votingapp:logout' %}">Log out</a>
+                           href="{% url 'votingapp:profile' %}">Привет, {{ user.get_username }}</a>
+                        <a class="btn btn-outline-danger" href="{% url 'votingapp:logout' %}">Выйти</a>
                     </div>
                 {% else %}
                     <div class="mr-sm-2">
-                        <a class="btn btn-outline-success m-1 mr-sm-2" href="{% url 'votingapp:login' %}">Sign in</a>
-                        <a class="btn btn-outline-primary" href="{% url 'votingapp:register' %}">Sign up</a>
+                        <a class="btn btn-outline-success m-1 mr-sm-2" href="{% url 'votingapp:login' %}">Войти</a>
+                        <a class="btn btn-outline-primary" href="{% url 'votingapp:register' %}">Зарегистрироваться</a>
                     </div>
                 {% endif %}
 

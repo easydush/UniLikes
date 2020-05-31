@@ -1,6 +1,6 @@
 main {
-    height: 68%;
-    width: 80%;
+    min-height: 700px;
+    width: 70%;
     margin: 0 auto;
 }
 
@@ -9,7 +9,7 @@ main {
 }
 
 .card {
-    width: 400px;
+    width: 350px;
     height: 500px;
     top: 10%;
     border-radius: 1%;
@@ -32,6 +32,10 @@ main {
 
 .best-teacher {
     transform: scale(1.1);
+}
+
+.second-teacher {
+    transform: scale(1.05);
 }
 
 pre {

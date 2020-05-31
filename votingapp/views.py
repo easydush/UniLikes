@@ -127,7 +127,8 @@ def vote_page(request):
                 x not in voted_teachers]
 
     if not teachers:
-        Student.objects.filter(pk=student.pk).update(semesters=student.semesters + curr_semester)
+        # Student.objects.filter(pk=student.pk).update(semesters=student.semesters + curr_semester)
+        teacher = None
     print(teachers)
 
     return render(request, 'voting/voteTest.html', {'teachers': teachers})
@@ -141,7 +142,7 @@ def vote_result(request):
     rate = request.POST.get('rate')
     print(request.content_params)
     print(teacher, rate)
-    rate_fact = StudTeachRateFact(student=student, teacher=teacher)
+    rate_fact = StudTeachRateFact(student=student, teacher=teacher, semester=curr_semester)
     rate_fact.save()
     if rate != -1:
         r = Rate(teacher=teacher, rate=rate)

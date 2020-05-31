@@ -11,22 +11,39 @@
 {% block content %}
     <main class="text-center">
 
-        {% if teachers %}
+        {% if teacher1 %}
             <div class="my-5">
-                <h2>The best teachers according to students</h2>
+                <h2>Лучшие преподаватели по мнению студентов</h2>
             </div>
             <div class="cards">
-                {% for rate in teachers %}
-                    <div class="card mx-auto">
+                {% if teacher2 %}
+                    <div class="card mx-auto second-teacher mt-3">
                         <div class="teacher-image mt-3"
-                                                     style="background-image: url(https://sun9-37.userapi.com/c850524/v850524622/1bc999/23jGzSoLn10.jpg)"></div>
-{#                             style="background-image: url({{ rate.teacher.photo_url }})"></div>#}
-                        {#                <p class="teacher-id" hidden>{{ teacher_sub.teacher_id }}</p>#}
-                        {% csrf_token %}
-                        <h4 class="mt-3 teacher-name">{{ rate.teacher.full_name }}</h4>
-                        <p class="teacher-description teacher-subject mt-2">Rating: {{ rate.rate }}</p>
+                             style="background-image: url({{ teacher2.photo_url }})"></div>
+                        {#                             style="background-image: url({{ rate.teacher.photo_url }})"></div>#}
+                        <h4 class="mt-3 teacher-name">{{ teacher2.full_name }}</h4>
+                        <p class="teacher-description teacher-subject mt-2">Рейтинг: {{ rating2 }}</p>
                     </div>
-                {% endfor %}
+                {% endif %}
+                {% if teacher1 %}
+                    <div class="card mx-auto best-teacher mt-3">
+                        <div class="teacher-image mt-3"
+                             style="background-image: url({{ teacher1.photo_url }})"></div>
+                        {#                             style="background-image: url({{ rate.teacher.photo_url }})"></div>#}
+                        <h4 class="mt-3 teacher-name">{{ teacher1.full_name }}</h4>
+                        <p class="teacher-description teacher-subject mt-2">Рейтинг: {{ rating1 }}</p>
+                    </div>
+                {% endif %}
+
+                {% if teacher3 %}
+                    <div class="card mx-auto mt-3">
+                        <div class="teacher-image mt-3"
+                             style="background-image: url({{ teacher3.photo_url }})"></div>
+                        {#                             style="background-image: url({{ rate.teacher.photo_url }})"></div>#}
+                        <h4 class="mt-3 teacher-name">{{ teacher3.full_name }}</h4>
+                        <p class="teacher-description teacher-subject mt-2">Рейтинг: {{ rating3}}</p>
+                    </div>
+                {% endif %}
             </div>
         {% else %}
             <div class="my-5">
