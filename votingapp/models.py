@@ -82,3 +82,8 @@ class StudTeachRateFact(models.Model):
 
     def __str__(self):
         return f'{self.student.username} voted for {self.teacher.surname} in {self.semester} semester'
+
+
+class UserToken(models.Model):
+    user = models.ForeignKey(Student, on_delete=models.CASCADE)
+    token = models.CharField(max_length=150)

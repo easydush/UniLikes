@@ -1,3 +1,4 @@
+celery
 Pillow==7.0.0
 whitenoise==5.0.1
 django==2.2.9
