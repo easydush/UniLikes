@@ -1,8 +1,11 @@
+// <script type="text/javascript">
+
 let board = document.querySelector('#board');
 
 let default_transform = 'translateX(-50%) translateY(-30%) rotate(0deg) rotateY(0deg) scale(1)';
 
 let iter = 0;
+let cards_amount = document.getElementById('teachers-cards').childElementCount;
 
 let vote;
 let teacher_id;
@@ -195,6 +198,8 @@ class Carousel {
     }
 
     push() {
+
+        console.log(iter);
         let card = document.getElementById('teacher' + iter);
         card.style.display = 'block';
         iter++;
@@ -217,7 +222,10 @@ function send_vote(vote, teacher_id, csrf_token) {
     var csrf = $("input[name=csrfmiddlewaretoken]").val()
     xhttp.open("POST", "{% url 'votingapp:vote_result' %}", true);
     xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    xhttp.send('csrfmiddlewaretoken=' + csrf_token + '&rate=' + vote + '&teacher_id=' + teacher_id)
+    {
+        #xhttp.send('csrfmiddlewaretoken=' + csrf_token + '&rate=' + vote + '&teacher_id=' + teacher_id)
+        #
+    }
 }
 
 // {# показывает "штамп" на 400 миллисекунд #}

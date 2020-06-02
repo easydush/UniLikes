@@ -194,8 +194,7 @@ def vote_page(request):
     voted_teachers = list(
         StudTeachRateFact.objects.filter(Q(semester=curr_semester) & Q(student=student)).only('teacher'))
     voted_teachers = [x.teacher for x in voted_teachers]
-    teachers = Teacher.objects.filter(teachersubjectcourse__semester=curr_semester)
-
+    teachers = set(Teacher.objects.filter(teachersubjectcourse__semester=curr_semester))
     teachers = [{'teacher': x, 'subjects': set(Subject.objects.filter(teachersubjectcourse__teacher=x))} for x in
                 teachers if
                 x not in voted_teachers]
@@ -205,7 +204,7 @@ def vote_page(request):
         teacher = None
     print(teachers)
 
-    return render(request, 'voting/voteTest.html', {'teachers': teachers})
+    return render(request, 'voting/vote.html', {'teachers': teachers})
 
 
 def vote_result(request):
