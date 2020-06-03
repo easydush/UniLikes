@@ -28,7 +28,7 @@
                     </div>
                 </div>
             </div>
-            <div class="buttons">
+            <div class="buttons" id="buttons">
                 <div class="buttons-container">
                     <a class="mx-2 vote-button" id="dislike-button" href="#"><i class="far fa-frown"></i> Не
                         удовлетворен</a>
@@ -81,6 +81,7 @@
 
         let iter = 0;
         let cards_amount = document.getElementById('teachers-cards').childElementCount;
+        let last_card = false;
 
         let vote;
         let teacher_id;
@@ -123,6 +124,8 @@
                     if (iter <= cards_amount) {
                         this.topCard.style.transform = default_transform;
                     } else {
+                        $('#buttons').hide();
+                        last_card = true;
                         this.topCard.style.transform = last_card_transform;
                     }
 
@@ -148,6 +151,11 @@
             }
 
             onTap(e) {
+
+
+                if (last_card) {
+                    window.location.replace("{% url 'votingapp:index' %}");
+                }
 
                 // get finger position on top card
                 let propX = (e.center.x - e.target.getBoundingClientRect().left) / e.target.clientWidth;
@@ -271,7 +279,7 @@
                         // reset cards position
                         this.topCard.style.transform = default_transform;
                         if (this.nextCard) this.nextCard.style.transform =
-                                'translateX(-50%) translateY(-50%) rotate(0deg) rotateY(0deg) scale(0.95)'
+                            'translateX(-50%) translateY(-50%) rotate(0deg) rotateY(0deg) scale(0.95)'
 
 
                     }
@@ -302,7 +310,7 @@
             var csrf = $("input[name=csrfmiddlewaretoken]").val()
             xhttp.open("POST", "{% url 'votingapp:vote_result' %}", true);
             xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-            {#xhttp.send('csrfmiddlewaretoken=' + csrf_token + '&rate=' + vote + '&teacher_id=' + teacher_id)#}
+            xhttp.send('csrfmiddlewaretoken=' + csrf_token + '&rate=' + vote + '&teacher_id=' + teacher_id)
         }
 
         {# показывает "штамп" на 400 миллисекунд #}
