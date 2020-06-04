@@ -22,16 +22,16 @@ from votingapp.utils import get_semester
 
 def index(request):
     if Rate.objects.all():
-        teachers = list(Rate.objects.values('teacher').annotate(rating=Avg('rate') * 100)[:3])
+        ratings = list(Rate.objects.values('teacher').annotate(rating=Avg('rate') * 100))
+        print(ratings)
 
-        teachers = sorted(teachers, key=lambda x: x['rating'], reverse=True)
+        teachers = sorted(ratings, key=lambda x: x['rating'], reverse=True)[:3]
         teacher1 = Teacher.objects.get(id=teachers[0]['teacher'])
         rating1 = int(teachers[0]['rating'])
         teacher2 = Teacher.objects.get(id=teachers[1]['teacher'])
         rating2 = int(teachers[1]['rating'])
         teacher3 = Teacher.objects.get(id=teachers[2]['teacher'])
         rating3 = int(teachers[2]['rating'])
-        print(rating2)
 
         return render(request, 'index.html', {'teacher1': teacher1,
                                               'rating1': rating1,
@@ -161,16 +161,19 @@ class TeachersList(View):
 class Statistics(View):
     def get(self, request):
         if Rate.objects.all():
-            teachers = list(Rate.objects.values('teacher').annotate(rating=Avg('rate') * 100)[:3])
+            teachers = list(Rate.objects.values('teacher').annotate(rating=Avg('rate') * 100))
 
-            rates = sorted(teachers, key=lambda x: x['rating'], reverse=True)
+            teachers = sorted(teachers, key=lambda x: x['rating'], reverse=True)
+            rates = [{'teacher': Teacher.objects.get(id=x.get('teacher')), 'rating': x.get('rating')} for x in
+                     teachers]
             # teacher1 = Teacher.objects.get(id=teachers[0]['teacher'])
             # rating1 = int(teachers[0]['rating'])
+            # print(rates)
 
-            return render(request, 'statistics.html', {'rates': rates,
-                                                       })
+            return render(request, 'voting/statistics.html', {'rates': rates,
+                                                              })
         else:
-            return render(request, 'statistics.html', {})
+            return render(request, 'voting/statistics.html', {})
 
 
 class TeacherView(DetailView):

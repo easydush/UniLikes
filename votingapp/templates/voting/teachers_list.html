@@ -15,13 +15,13 @@
             {% for teacher_set in teachers %}
                 <div class="author">
                     <div class="row mt-2">
-                        <div class="col-3"></div>
+                        <div class="col-2"></div>
                         <div class="col-2 p-4">
                             <div class="avatar rounded"
                                 style="background-image: url({{ teacher_set.teacher.photo_url }})">
                             </div>
                         </div>
-                        <div class="author-name text-center col-5">
+                        <div class="author-name text-center col-6">
                             <h4 class="mt-5">{{ teacher_set.teacher.full_name }}</h4>
                             <p class="mt-3">Предметы:
                             {% for subject in teacher_set.subjects %}
