@@ -4,23 +4,22 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, AbstractUser
 
 COURSE_CHOICES = [
-    (1, '1 - бакалавриат'),
-    (2, '2 - бакалавриат'),
-    (3, '3 - бакалавриат'),
-    (4, '4 - бакалавриат'),
-    (5, '1 - магистратура'),
-    (6, '2 - магистратура'),
+    (2019, '1 - бакалавриат'),
+    (2018, '2 - бакалавриат'),
+    (2017, '3 - бакалавриат'),
+    (2016, '4 - бакалавриат'),
+    (2015, '1 - магистратура'),
+    (2014, '2 - магистратура'),
 ]
 
 
 class Student(AbstractUser):
-    course = models.IntegerField(
+    admission_year = models.IntegerField(
         choices=COURSE_CHOICES,
         default=1)
-    semesters = models.SlugField(default='0', null=True, blank=True)
 
     def __str__(self):
-        return f'{self.email[:self.email.index("@")]}, {self.course}'
+        return f'{self.email[:self.email.index("@")]}, {self.admission_year}'
 
     class Meta:
         verbose_name = 'student'

@@ -1,8 +1,9 @@
+
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import LoginView
 from django.core.exceptions import ValidationError
 from django.db.models import Q, Avg
 from django.http import HttpResponse
@@ -18,6 +19,9 @@ from votingapp.models import Student, Teacher, TeacherSubjectCourse, Rate, StudT
 
 
 # Create your views here.
+from votingapp.utils import get_semester
+
+
 def index(request):
     teachers = list(Rate.objects.values('teacher').annotate(rating=Avg('rate') * 100)[:3])
 
@@ -190,7 +194,8 @@ class TeacherView(DetailView):
 @login_required
 def vote_page(request):
     student = Student.objects.get(username=request.user.username)
-    curr_semester = int(student.semesters[-1]) + 1
+    curr_semester = get_semester(student.admission_year)
+    print(curr_semester)
     voted_teachers = list(
         StudTeachRateFact.objects.filter(Q(semester=curr_semester) & Q(student=student)).only('teacher'))
     voted_teachers = [x.teacher for x in voted_teachers]
@@ -198,10 +203,6 @@ def vote_page(request):
     teachers = [{'teacher': x, 'subjects': set(Subject.objects.filter(teachersubjectcourse__teacher=x))} for x in
                 teachers if
                 x not in voted_teachers]
-
-    if not teachers:
-        # Student.objects.filter(pk=student.pk).update(semesters=student.semesters + curr_semester)
-        teacher = None
     print(teachers)
 
     return render(request, 'voting/vote.html', {'teachers': teachers})
@@ -210,13 +211,14 @@ def vote_page(request):
 def vote_result(request):
     student = Student.objects.get(username=request.user.username)
     teacher = Teacher.objects.get(id=request.POST.get('teacher_id'))
-    curr_semester = int(student.semesters[-1]) + 1
+    curr_semester = get_semester(student.admission_year)
     # result handler for AJAX in voting
     rate = request.POST.get('rate')
     print(request.content_params)
     print(teacher, rate)
     rate_fact = StudTeachRateFact(student=student, teacher=teacher, semester=curr_semester)
     rate_fact.save()
+    print('saved')
     if rate != -1:
         r = Rate(teacher=teacher, rate=rate)
         r.save()

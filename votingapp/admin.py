@@ -17,7 +17,7 @@ class StudentAdmin(UserAdmin):
     add_form = StudentForm
     form = StudentForm
     model = Student
-    list_display = ['email', 'username', 'course', 'semesters']
+    list_display = ['email', 'username', 'admission_year', 'semesters']
 
 
 @admin.register(Teacher)
