@@ -158,6 +158,21 @@ class TeachersList(View):
         return render(request, 'voting/teachers_list.html', {'teachers': teachers})
 
 
+class Statistics(View):
+    def get(self, request):
+        if Rate.objects.all():
+            teachers = list(Rate.objects.values('teacher').annotate(rating=Avg('rate') * 100)[:3])
+
+            rates = sorted(teachers, key=lambda x: x['rating'], reverse=True)
+            # teacher1 = Teacher.objects.get(id=teachers[0]['teacher'])
+            # rating1 = int(teachers[0]['rating'])
+
+            return render(request, 'statistics.html', {'rates': rates,
+                                                       })
+        else:
+            return render(request, 'statistics.html', {})
+
+
 class TeacherView(DetailView):
     model = Teacher
     template_name = 'voting/teacher_view.html'
