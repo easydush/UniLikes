@@ -135,8 +135,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 AUTH_USER_MODEL = 'votingapp.Student'
-
-LOGOUT_REDIRECT_URL = reverse_lazy('votingapp:login')
+LOGIN_REDIRECT_URL=reverse_lazy('votingapp:profile')
+LOGOUT_REDIRECT_URL = reverse_lazy('votingapp:index')
 
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 
@@ -150,8 +150,8 @@ CELERY_ALWAYS_EAGER = False
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-# EMAIL_HOST_USER = env.EMAIL_HOST_USER
-# EMAIL_HOST_PASSWORD = env.EMAIL_HOST_PASSWORD
+EMAIL_HOST_USER = env.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = env.EMAIL_HOST_PASSWORD
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Celery
 CELERY_TIMEZONE = TIME_ZONE

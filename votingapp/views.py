@@ -1,14 +1,13 @@
-
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.views import LoginView
 from django.core.exceptions import ValidationError
 from django.db.models import Q, Avg
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy, resolve
 from django.views import View
 from django.views.generic import DetailView, CreateView, TemplateView, FormView
 from votingapp.tasks import send_email_task
@@ -17,30 +16,32 @@ from votingapp.forms import StudentForm, PasswordResetForm, PasswordResetRequest
 from django.contrib.auth import authenticate, login, logout
 from votingapp.models import Student, Teacher, TeacherSubjectCourse, Rate, StudTeachRateFact, Subject, UserToken
 
-
 # Create your views here.
 from votingapp.utils import get_semester
 
 
 def index(request):
-    teachers = list(Rate.objects.values('teacher').annotate(rating=Avg('rate') * 100)[:3])
+    if Rate.objects.all():
+        teachers = list(Rate.objects.values('teacher').annotate(rating=Avg('rate') * 100)[:3])
 
-    teachers = sorted(teachers, key=lambda x: x['rating'], reverse=True)
-    teacher1 = Teacher.objects.get(id=teachers[0]['teacher'])
-    rating1 = int(teachers[0]['rating'])
-    teacher2 = Teacher.objects.get(id=teachers[1]['teacher'])
-    rating2 = int(teachers[1]['rating'])
-    teacher3 = Teacher.objects.get(id=teachers[2]['teacher'])
-    rating3 = int(teachers[2]['rating'])
-    print(rating2)
+        teachers = sorted(teachers, key=lambda x: x['rating'], reverse=True)
+        teacher1 = Teacher.objects.get(id=teachers[0]['teacher'])
+        rating1 = int(teachers[0]['rating'])
+        teacher2 = Teacher.objects.get(id=teachers[1]['teacher'])
+        rating2 = int(teachers[1]['rating'])
+        teacher3 = Teacher.objects.get(id=teachers[2]['teacher'])
+        rating3 = int(teachers[2]['rating'])
+        print(rating2)
 
-    return render(request, 'index.html', {'teacher1': teacher1,
-                                          'rating1': rating1,
-                                          'teacher2': teacher2,
-                                          'rating2': rating2,
-                                          'teacher3': teacher3,
-                                          'rating3': rating3,
-                                          })
+        return render(request, 'index.html', {'teacher1': teacher1,
+                                              'rating1': rating1,
+                                              'teacher2': teacher2,
+                                              'rating2': rating2,
+                                              'teacher3': teacher3,
+                                              'rating3': rating3,
+                                              })
+    else:
+        return render(request, 'index.html', {})
 
 
 def about(request):
@@ -70,37 +71,8 @@ class RegisterView(View):
         return render(request, 'voting/registration.html', {'form': form})
 
 
-class StudLoginView(View):
-    def get(self, request):
-        return render(request, 'voting/login.html', {'form': AuthenticationForm})
-
-    def post(self, request):
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = authenticate(
-                request,
-                username=form.cleaned_data.get('username'),
-                password=form.cleaned_data.get('password')
-            )
-
-            if user is None:
-                return render(
-                    request,
-                    'voting/login.html',
-                    {'form': form, 'invalid_creds': True}
-                )
-
-            try:
-                form.confirm_login_allowed(user)
-            except ValidationError:
-                return render(
-                    request,
-                    'voting/login.html',
-                    {'form': form, 'invalid_creds': True}
-                )
-            login(request, user)
-
-            return redirect(reverse('votingapp:profile'))
+class StudLoginView(LoginView):
+    template_name = 'voting/login.html'
 
 
 class ResetPasswordRequestView(FormView):
