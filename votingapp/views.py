@@ -2,11 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.views import LoginView
 from django.core.exceptions import ValidationError
 from django.db.models import Q, Avg
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy, resolve
 from django.views import View
 from django.views.generic import DetailView, CreateView, TemplateView, FormView
 from votingapp.tasks import send_email_task
@@ -70,37 +71,8 @@ class RegisterView(View):
         return render(request, 'voting/registration.html', {'form': form})
 
 
-class StudLoginView(View):
-    def get(self, request):
-        return render(request, 'voting/login.html', {'form': AuthenticationForm})
-
-    def post(self, request):
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = authenticate(
-                request,
-                username=form.cleaned_data.get('username'),
-                password=form.cleaned_data.get('password')
-            )
-
-            if user is None:
-                return render(
-                    request,
-                    'voting/login.html',
-                    {'form': form, 'invalid_creds': True}
-                )
-
-            try:
-                form.confirm_login_allowed(user)
-            except ValidationError:
-                return render(
-                    request,
-                    'voting/login.html',
-                    {'form': form, 'invalid_creds': True}
-                )
-            login(request, user)
-
-            return redirect(reverse('votingapp:profile'))
+class StudLoginView(LoginView):
+    template_name = 'voting/login.html'
 
 
 class ResetPasswordRequestView(FormView):
@@ -184,6 +156,21 @@ class TeachersList(View):
         teachers = [{'teacher': x, 'subjects': set(Subject.objects.filter(teachersubjectcourse__teacher=x))}
                     for x in teachers]
         return render(request, 'voting/teachers_list.html', {'teachers': teachers})
+
+
+class Statistics(View):
+    def get(self, request):
+        if Rate.objects.all():
+            teachers = list(Rate.objects.values('teacher').annotate(rating=Avg('rate') * 100)[:3])
+
+            rates = sorted(teachers, key=lambda x: x['rating'], reverse=True)
+            # teacher1 = Teacher.objects.get(id=teachers[0]['teacher'])
+            # rating1 = int(teachers[0]['rating'])
+
+            return render(request, 'statistics.html', {'rates': rates,
+                                                       })
+        else:
+            return render(request, 'statistics.html', {})
 
 
 class TeacherView(DetailView):

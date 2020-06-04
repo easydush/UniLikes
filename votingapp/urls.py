@@ -12,6 +12,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('about/', views.about, name='about'),
     path('teachers/', views.TeachersList.as_view(), name='teachers'),
+    path('statistics/', views.Statistics.as_view(), name='statistics'),
     path('vote/', views.vote_page, name='voting'),
     path('sendVote/', views.vote_result, name='vote_result'),
     path('reset/', ResetPasswordRequestView.as_view(), name='reset_request'),
