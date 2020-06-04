@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from votingapp.forms import StudentForm
-from votingapp.models import Teacher, Subject, TeacherSubjectCourse, Rate, Student, StudTeachRateFact, UserToken
+from votingapp.models import Teacher, Subject, TeacherSubjectCourse, Rate, Student, StudTeachRateFact, UserToken, \
+    AdmissionYear
 
 # Register your models here.
 admin.site.register(Subject)
@@ -10,8 +11,10 @@ admin.site.register(Rate)
 admin.site.register(Student)
 admin.site.register(TeacherSubjectCourse)
 admin.site.register(StudTeachRateFact)
+admin.site.register(AdmissionYear)
 
 admin.site.register(UserToken)
+
 
 class StudentAdmin(UserAdmin):
     add_form = StudentForm

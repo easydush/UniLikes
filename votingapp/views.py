@@ -1,5 +1,3 @@
-
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
@@ -17,30 +15,32 @@ from votingapp.forms import StudentForm, PasswordResetForm, PasswordResetRequest
 from django.contrib.auth import authenticate, login, logout
 from votingapp.models import Student, Teacher, TeacherSubjectCourse, Rate, StudTeachRateFact, Subject, UserToken
 
-
 # Create your views here.
 from votingapp.utils import get_semester
 
 
 def index(request):
-    teachers = list(Rate.objects.values('teacher').annotate(rating=Avg('rate') * 100)[:3])
+    if Rate.objects.all():
+        teachers = list(Rate.objects.values('teacher').annotate(rating=Avg('rate') * 100)[:3])
 
-    teachers = sorted(teachers, key=lambda x: x['rating'], reverse=True)
-    teacher1 = Teacher.objects.get(id=teachers[0]['teacher'])
-    rating1 = int(teachers[0]['rating'])
-    teacher2 = Teacher.objects.get(id=teachers[1]['teacher'])
-    rating2 = int(teachers[1]['rating'])
-    teacher3 = Teacher.objects.get(id=teachers[2]['teacher'])
-    rating3 = int(teachers[2]['rating'])
-    print(rating2)
+        teachers = sorted(teachers, key=lambda x: x['rating'], reverse=True)
+        teacher1 = Teacher.objects.get(id=teachers[0]['teacher'])
+        rating1 = int(teachers[0]['rating'])
+        teacher2 = Teacher.objects.get(id=teachers[1]['teacher'])
+        rating2 = int(teachers[1]['rating'])
+        teacher3 = Teacher.objects.get(id=teachers[2]['teacher'])
+        rating3 = int(teachers[2]['rating'])
+        print(rating2)
 
-    return render(request, 'index.html', {'teacher1': teacher1,
-                                          'rating1': rating1,
-                                          'teacher2': teacher2,
-                                          'rating2': rating2,
-                                          'teacher3': teacher3,
-                                          'rating3': rating3,
-                                          })
+        return render(request, 'index.html', {'teacher1': teacher1,
+                                              'rating1': rating1,
+                                              'teacher2': teacher2,
+                                              'rating2': rating2,
+                                              'teacher3': teacher3,
+                                              'rating3': rating3,
+                                              })
+    else:
+        return render(request, 'index.html', {})
 
 
 def about(request):
@@ -194,7 +194,7 @@ class TeacherView(DetailView):
 @login_required
 def vote_page(request):
     student = Student.objects.get(username=request.user.username)
-    curr_semester = get_semester(student.admission_year)
+    curr_semester = get_semester(student.admission_year())
     print(curr_semester)
     voted_teachers = list(
         StudTeachRateFact.objects.filter(Q(semester=curr_semester) & Q(student=student)).only('teacher'))
@@ -211,7 +211,7 @@ def vote_page(request):
 def vote_result(request):
     student = Student.objects.get(username=request.user.username)
     teacher = Teacher.objects.get(id=request.POST.get('teacher_id'))
-    curr_semester = get_semester(student.admission_year)
+    curr_semester = get_semester(student.admission_year())
     # result handler for AJAX in voting
     rate = request.POST.get('rate')
     print(request.content_params)

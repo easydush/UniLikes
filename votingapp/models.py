@@ -3,23 +3,22 @@ from django.db.models import Avg
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, AbstractUser
 
-COURSE_CHOICES = [
-    (2019, '1 - бакалавриат'),
-    (2018, '2 - бакалавриат'),
-    (2017, '3 - бакалавриат'),
-    (2016, '4 - бакалавриат'),
-    (2015, '1 - магистратура'),
-    (2014, '2 - магистратура'),
-]
+
+class AdmissionYear(models.Model):
+    year = models.IntegerField(max_length=4)
+
+    def __str__(self):
+        return str(self.year)
 
 
 class Student(AbstractUser):
-    admission_year = models.IntegerField(
-        choices=COURSE_CHOICES,
-        default=1)
+    admission = models.ForeignKey('AdmissionYear', on_delete=models.CASCADE, null=True)
+
+    def admission_year(self):
+        return self.admission.year
 
     def __str__(self):
-        return f'{self.email[:self.email.index("@")]}, {self.admission_year}'
+        return f'{self.email[:self.email.index("@")]}, {self.admission}'
 
     class Meta:
         verbose_name = 'student'

@@ -13,7 +13,7 @@ class StudentForm(UserCreationForm):
 
     class Meta:
         model = Student
-        fields = ('username', 'password1', 'password2', 'email', 'admission_year')
+        fields = ('username', 'password1', 'password2', 'email', 'admission')
 
     def save(self, commit=True):
         user = super(StudentForm, self).save(commit=False)
