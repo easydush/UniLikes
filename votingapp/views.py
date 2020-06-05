@@ -213,3 +213,7 @@ def vote_result(request):
         r = Rate(teacher=teacher, rate=rate)
         r.save()
     return HttpResponse(status=200)
+
+
+def error_500(request):
+    return render(request, '500.html', {})

@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Abstr
 
 
 class AdmissionYear(models.Model):
-    year = models.IntegerField(max_length=4)
+    year = models.IntegerField()
 
     def __str__(self):
         return str(self.year)

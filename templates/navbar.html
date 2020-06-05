@@ -11,8 +11,10 @@
             {% if user.is_authenticated %}
                 <a class="btn btn-outline-success m-1"
                    href="{% url 'votingapp:voting' %}">Голосовать</a>
-                <a class="btn btn-outline-success m-1 ml-2 mr-auto"
+                <a class="btn btn-outline-info m-1"
                    href="{% url 'votingapp:teachers' %}">Преподаватели</a>
+                <a class="btn btn-outline-primary m-1 ml-2 mr-auto"
+                   href="{% url 'votingapp:statistics' %}">Результаты</a>
                 <div>
                     <a class="btn btn-outline-success m-1 mr-sm-2"
                        href="{% url 'votingapp:profile' %}">Привет, {{ user.get_username }}</a>
