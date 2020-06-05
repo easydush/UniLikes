@@ -9,7 +9,6 @@ from votingapp.models import Teacher, Subject, TeacherSubjectCourse, Rate, Stude
 admin.site.register(Subject)
 admin.site.register(Rate)
 admin.site.register(Student)
-admin.site.register(TeacherSubjectCourse)
 admin.site.register(StudTeachRateFact)
 admin.site.register(AdmissionYear)
 
@@ -21,6 +20,8 @@ class StudentAdmin(UserAdmin):
     form = StudentForm
     model = Student
     list_display = ['email', 'username', 'admission_year', 'semesters']
+    ordering = ['surname']
+    search_fields = ['surname']
 
 
 @admin.register(Teacher)
@@ -28,3 +29,10 @@ class TeacherAdmin(admin.ModelAdmin):
     empty_value_display = 'no one'
     ordering = ['surname']
     search_fields = ['surname']
+
+
+@admin.register(TeacherSubjectCourse)
+class TeacherSubjectAdmin(admin.ModelAdmin):
+    empty_value_display = 'no one'
+    ordering = ['teacher__surname']
+    search_fields = ['teacher__surname']
