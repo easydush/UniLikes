@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-from backend.account.models import Teacher, User
+from account.models import Teacher, User
 
 
 class RateFact(models.Model):
