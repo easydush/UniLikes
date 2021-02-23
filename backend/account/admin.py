@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import User, Teacher, TeacherSubjectCourse
+from .models import User
 
 
 class UserAdmin(BaseUserAdmin):
@@ -22,13 +22,4 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('email',)
 
 
-class TeacherAdmin(admin.ModelAdmin):
-    model = Teacher
-    list_display = ('surname', 'name', 'patronymic', 'photo_url', 'rating')
-    list_filter = ('surname', 'name', 'patronymic')
-    ordering = ('surname', 'name', 'rating')
-
-
 admin.site.register(User, UserAdmin)
-admin.site.register(Teacher, TeacherAdmin)
-admin.site.register(TeacherSubjectCourse)
