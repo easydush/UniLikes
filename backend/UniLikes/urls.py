@@ -14,10 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from rest_framework import permissions
+from rest_framework import permissions, routers
 from django.urls import path, include
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+import voting.views
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -31,9 +32,13 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
+
+router = routers.DefaultRouter()
+router.register(r'voting', voting.views.VotingViewSet, basename='voting')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('api/', include(router.urls)),
+    path('api/', include(router.urls)),
     path('api/auth/', include('djoser.urls')),
     path('api/auth/', include('djoser.urls.authtoken')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

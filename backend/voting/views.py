@@ -6,7 +6,7 @@ from .models import Teacher, RateFact
 from .serializers import RateFactSerializer
 
 
-class VotesViewSet(viewsets.ModelViewSet):
+class VotingViewSet(viewsets.ModelViewSet):
     serializer_class = Teacher
     permission_classes = [permissions.IsAuthenticated]
 
@@ -31,6 +31,7 @@ class VotesViewSet(viewsets.ModelViewSet):
                     teacher.rating = (teacher.rating * teacher.vote_counts + rate) / teacher.vote_counts
                     teacher.save()
                 RateFact.objects.create(student=student, semester=semester, teacher=teacher)
+                return Response(status=status.HTTP_200_OK)
             except Teacher.DoesNotExist:
                 return Response(f'Teacher with id {teacher_id} has not found',
                                 status=status.HTTP_400_BAD_REQUEST)
