@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_swagger',
     'drf_yasg',
-
 ]
 
 MIDDLEWARE = [
@@ -133,4 +132,26 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-DEFAULT_FIELDS_MAX_LENGTH=60
+DEFAULT_FIELDS_MAX_LENGTH = 100
+DJOSER = {
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    'SEND_ACTIVATION_EMAIL': True,
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    'SET_PASSWORD_RETYPE': True,
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'SERIALIZERS': {
+        'current_user': 'account.serializers.UserInfoSerializer',
+    },
+    'EMAIL': {
+        'activation': 'account.email.CustomActivationEmail',
+        'password_reset': 'account.email.CustomPasswordResetEmail'
+    }
+}
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+EMAIL_USE_TLS = True
+
+CELERY_BROKER_URL = 'redis://localhost:6379'

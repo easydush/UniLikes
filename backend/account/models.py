@@ -17,7 +17,7 @@ class UserManager(BaseUserManager):
             raise ValueError('The Email must be set')
         email = self.normalize_email(email)
         if not email.endswith('kpfu.ru'):
-            raise ValueError('The Email should be in kpfu domain')
+            raise ValueError('The Email should be in kpfu.ru domain')
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
