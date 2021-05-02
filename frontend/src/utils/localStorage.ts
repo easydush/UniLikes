@@ -1,7 +1,7 @@
 import { User } from '../types';
 import { isNil } from 'lodash';
 
-enum localStorageKeys {
+export enum localStorageKeys {
     USER = 'user',
     ACCESS_KEY = 'access_key'
 }
