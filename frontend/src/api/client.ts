@@ -7,11 +7,11 @@ const getAxiosConfig = (): AxiosRequestConfig => {
     const headers: any = {};
 
     if (token) {
-        headers.Authorization = `Bearer ${token}`;
+        headers.Authorization = `Token ${token}`;
     }
 
     return {
-        baseURL: `${window.location.protocol}//${window.location.host}/`,
+        baseURL: `http://localhost:8000/api/`,
         headers,
     };
 };
@@ -49,7 +49,7 @@ class ApiClient {
     }
 
     setAuthHeader(token: string): void {
-        this.instance.defaults.headers.Authorization = `Bearer ${token}`;
+        this.instance.defaults.headers.Authorization = `Token ${token}`;
     }
 }
 

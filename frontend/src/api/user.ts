@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { message } from 'antd';
 
 export const authorize = (userCredentials: UserCredentials): void => {
-    apiClient.post('api/auth/users/', userCredentials)
+    apiClient.post('auth/token/login/', userCredentials)
         .then((response: AxiosResponse) => {
             console.log(response);
         })
