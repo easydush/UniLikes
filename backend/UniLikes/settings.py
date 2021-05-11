@@ -141,6 +141,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+SRC_DIR = Path(__file__).resolve().parent.parent
+PROJECT_DIR = Path(__file__).resolve().parent.parent.parent.parent
+
+STATIC_ROOT = PROJECT_DIR / 'static_root/static'
+
 DEFAULT_FIELDS_MAX_LENGTH = 100
 DJOSER = {
     'USER_CREATE_PASSWORD_RETYPE': True,
@@ -156,7 +161,7 @@ DJOSER = {
         'password_reset': 'account.email.CustomPasswordResetEmail'
     }
 }
-EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST = 'in-v3.mailjet.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
@@ -164,3 +169,4 @@ DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
 EMAIL_USE_TLS = True
 
 CELERY_BROKER_URL = 'redis://localhost:6379'
+APP_URL = env('APP_URL')
