@@ -1,11 +1,17 @@
 import React, { useCallback } from 'react';
 import { Button, Form, Input } from 'antd';
 import { authorize } from '../../api';
+import { setCurrentUser } from '../../utils';
 
 export const Login = (): JSX.Element => {
 
     const handleFinish = useCallback((values) => {
-        authorize(values);
+        const response = authorize(values);
+        response.then(data => {
+            if (data){
+                setCurrentUser(data.data);
+            }
+        })
     }, []);
 
     return (
