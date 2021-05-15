@@ -2,14 +2,13 @@ import { ConfirmResetCredentials, RegisterCredentials, ResetCredentials, User, U
 import { apiClient } from './client';
 import { AxiosResponse } from 'axios';
 import { message } from 'antd';
+import { makeRequestAndHandleError } from './helpers';
+import { ResponseResult } from './types';
 
-export const authorize = (userCredentials: UserCredentials): Promise<AxiosResponse<User> | void> => {
-    return apiClient.post('auth/token/login/', userCredentials)
-        .then((response) => response)
-        .catch(() => {
-            message.error('Error with login');
-        });
+export const authorize = (userCredentials: UserCredentials): Promise<ResponseResult<User>> => {
+    return makeRequestAndHandleError<User>(() => apiClient.post('auth/token/login/', userCredentials))
 };
+
 export const register = (userCredentials: RegisterCredentials): void => {
     apiClient.post('auth/users/', userCredentials)
         .then((response: AxiosResponse) => {
