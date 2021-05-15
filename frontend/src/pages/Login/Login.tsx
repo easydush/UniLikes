@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { Button, Form, Input } from 'antd';
 import { authorize } from '../../api';
 import { setCurrentUser } from '../../utils';
+import { makeRequiredFormFieldRule } from '../../utils/formRules';
 
 export const Login = (): JSX.Element => {
 
@@ -19,7 +20,7 @@ export const Login = (): JSX.Element => {
             <Form.Item
                 label='Email'
                 name='email'
-                rules={[{ required: true, message: 'Please input your email!' }]}
+                rules={[makeRequiredFormFieldRule('Please input your email!')]}
             >
                 <Input />
             </Form.Item>
