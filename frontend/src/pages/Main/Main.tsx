@@ -1,62 +1,111 @@
-import React, { useCallback } from 'react';
-import { Content, Header } from 'antd/lib/layout/layout';
-import { Badge, Layout, Menu } from 'antd';
-import { theme } from '../../styles';
-import { QuestionCircleOutlined, UserOutlined } from '@ant-design/icons';
-import { Link, useHistory } from 'react-router-dom';
-import { MenuInfo } from 'rc-menu/lib/interface';
-import { Routes as R } from '../../constants';
-
-enum MenuKeys {
-    VOTE = 'vote',
-    PROFILE = 'profile',
-    TEACHER_RATING = 'teacher-rating',
-}
+import React, { useEffect, useMemo, useState } from 'react';
+import { Avatar, Badge, Layout, Table, Tag } from 'antd';
+import { HeaderCustom } from '../../components/Header';
+import { ColumnsType } from 'antd/lib/table';
+import { Teacher } from '../../types/teacher';
+import { teachers } from '../../mock/teachers';
+import { getRatingStatus } from '../../utils/ratingStatus';
+import { InfoBlock, PageHeaderText, StyledAlert, StyledContent, StyledPageHeader } from './styles';
 
 export const Main = (): JSX.Element => {
-    const history = useHistory();
+    const [loading, setLoading] = useState<boolean>(false);
+    const [data, setData] = useState<Teacher[]>([]);
 
-    const handleChange = useCallback(
-        (info: MenuInfo) => {
-            const key = info.key;
-            if (key === MenuKeys.VOTE) {
-                history.push(R.VOTE);
-            }
-            if (key === MenuKeys.TEACHER_RATING) {
-                history.push(R.TEACHER_RATING);
-            }
-            if (key === MenuKeys.PROFILE) {
-                history.push(R.PROFILE);
-            }
-        },
-        [history],
+    const columns = useMemo(
+        () =>
+            [
+                {
+                    title: 'Фото',
+                    dataIndex: 'photo',
+                    width: '5%',
+                    render: function renderAvatar(value) {
+                        return <Avatar src={value} />;
+                    },
+                },
+                {
+                    title: 'ФИО',
+                    dataIndex: 'name',
+                    width: '20%',
+                    render: function renderName(value, record) {
+                        return (
+                            <p>
+                                {record.surname} {record.name} {record.middleName}
+                            </p>
+                        );
+                    },
+                    sorter: (a, b) => a.surname.localeCompare(b.surname),
+                },
+                {
+                    title: 'Предметы',
+                    dataIndex: 'subjects',
+                    width: '50%',
+                    render: function renderSubjects(value, record) {
+                        return (
+                            <>
+                                {record.subjects.map((tag) => {
+                                    const color = tag.length < 5 ? 'geekblue' : tag.length > 7 ? 'gold' : 'green';
+                                    return (
+                                        <Tag color={color} key={tag}>
+                                            {tag.toUpperCase()}
+                                        </Tag>
+                                    );
+                                })}
+                            </>
+                        );
+                    },
+                },
+                {
+                    title: 'Рейтинг',
+                    dataIndex: 'rating',
+                    render: function renderSubjects(value) {
+                        return (
+                            <p>
+                                {' '}
+                                <Badge status={getRatingStatus(value)} /> {value}
+                            </p>
+                        );
+                    },
+                    sorter: (a, b) => a.rating - b.rating,
+                },
+                {
+                    title: 'Последняя оценка',
+                    dataIndex: 'lastVote',
+                },
+            ] as ColumnsType<Teacher>,
+        [],
     );
+    useEffect(() => {
+        async function getData() {
+            setLoading(true);
+            await setTimeout(() => {
+                setData(teachers);
+                setLoading(false);
+            }, 500);
+        }
 
+        getData();
+    }, []);
     return (
         <Layout>
-            <Header style={{ backgroundColor: 'white' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <div>UniLikes</div>
-                    <div style={{ width: '65%' }}>
-                        <Menu mode="horizontal" defaultSelectedKeys={[MenuKeys.TEACHER_RATING]} onClick={handleChange}>
-                            <Menu.Item key={MenuKeys.TEACHER_RATING}>Рейтинг преподавателей</Menu.Item>
-                            <Menu.Item key={MenuKeys.PROFILE}>Профиль</Menu.Item>
-                            <Menu.Item key={MenuKeys.VOTE}>
-                                <Badge dot>Голосовать</Badge>
-                            </Menu.Item>
-                        </Menu>
-                    </div>
-                    <div>
-                        <QuestionCircleOutlined />
-                        <UserOutlined />
-                        Name Surname
-                        <Link to="">Выход</Link>
-                    </div>
-                </div>
-            </Header>
-            <Content style={{ backgroundColor: theme.colors.gray_3 }}>
-                TODO
-            </Content>
+            <HeaderCustom />
+            <StyledContent>
+                <StyledPageHeader title={<PageHeaderText>Рейтинг преподавателей</PageHeaderText>} backIcon={false} />
+                <InfoBlock>
+                    <StyledAlert
+                        message="Информация"
+                        description="Сейчас доступно голосование"
+                        type="info"
+                        showIcon
+                        closable
+                    />
+                    <Table<Teacher>
+                        columns={columns}
+                        dataSource={data}
+                        loading={loading}
+                        pagination={{ pageSize: 7 }}
+                    />
+                </InfoBlock>
+            </StyledContent>
         </Layout>
     );
 };
