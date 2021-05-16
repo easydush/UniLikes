@@ -16,7 +16,7 @@ export const LogoText = styled.div`
 `;
 
 export const MenuWrapper = styled.div`
-    width: 85%;
+    width: 75%;
 `;
 
 export const InfoWrapper = styled.div`
@@ -27,7 +27,7 @@ export const InfoWrapper = styled.div`
 `;
 
 export const UserBlock = styled.div`
-    width: 50%;
+    width: 65%;
 `;
 
 export const ExitText = styled.p`

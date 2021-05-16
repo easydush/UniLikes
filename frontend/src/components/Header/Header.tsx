@@ -75,7 +75,7 @@ export const HeaderCustom = (): JSX.Element => {
                         <QuestionCircleOutlined />
                     </div>
                     <UserBlock>
-                        <Avatar src="https://www.noku.io/file/2018/01/icon_Marketing.png" />
+                        <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
                         <NameText>Name Surname</NameText>
                     </UserBlock>
                     <div>
