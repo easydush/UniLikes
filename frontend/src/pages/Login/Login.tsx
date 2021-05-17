@@ -1,36 +1,41 @@
-import React, { useCallback } from 'react';
-import { Button, Form, Input } from 'antd';
-import { authorize } from '../../api';
+import React from 'react';
+import {
+    LoginFormWrapper,
+    LoginPageWrapper,
+    LogoText,
+    LogoTextDescription,
+    LogoTextWrapper,
+    TabsWrapper,
+} from './styles';
+import { LoginForm } from '../../components/LoginForm';
+import { Tabs } from 'antd';
 
+const { TabPane } = Tabs;
 export const Login = (): JSX.Element => {
 
-    const handleFinish = useCallback((values) => {
-        authorize(values);
-    }, []);
 
     return (
-        <Form onFinish={handleFinish}>
-            <Form.Item
-                label='Email'
-                name='email'
-                rules={[{ required: true, message: 'Please input your email!' }]}
-            >
-                <Input />
-            </Form.Item>
-
-            <Form.Item
-                label='Password'
-                name='password'
-                rules={[{ required: true, message: 'Please input your password!' }]}
-            >
-                <Input.Password />
-            </Form.Item>
-
-            <Form.Item>
-                <Button type='primary' htmlType='submit'>
-                    Submit
-                </Button>
-            </Form.Item>
-        </Form>
+        <LoginPageWrapper>
+            <LogoTextWrapper>
+                <LogoText>
+                    UniLikes
+                </LogoText>
+                <LogoTextDescription>
+                    Анонимное оценивание работы преподавателей
+                </LogoTextDescription>
+            </LogoTextWrapper>
+            <LoginFormWrapper>
+                <TabsWrapper>
+                    <Tabs defaultActiveKey="login">
+                        <TabPane tab="Вход" key="login">
+                            <LoginForm />
+                        </TabPane>
+                        <TabPane tab="Регистрация" key="registration">
+                            Регистрация
+                        </TabPane>
+                    </Tabs>
+                </TabsWrapper>
+            </LoginFormWrapper>
+        </LoginPageWrapper>
     );
 };
