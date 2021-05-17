@@ -1,7 +1,7 @@
-import { Avatar, Badge, Menu } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Avatar, Badge, Menu, Spin } from 'antd';
+import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Link, useHistory } from 'react-router-dom';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { Routes as R } from '../../constants';
 import {
@@ -14,7 +14,7 @@ import {
     StyledHeader,
     UserBlock,
 } from './styles';
-
+import { logout } from '../../api';
 enum MenuKeys {
     VOTE = 'vote',
     PROFILE = 'profile',
@@ -23,7 +23,9 @@ enum MenuKeys {
 
 export const HeaderCustom = (): JSX.Element => {
     const history = useHistory();
-
+    const handleLogout = useCallback(async () => {
+        const response = await logout();
+    }, []);
     const handleChange = useCallback(
         (info: MenuInfo) => {
             const key = info.key;
@@ -62,7 +64,7 @@ export const HeaderCustom = (): JSX.Element => {
             <HeaderWrapper>
                 <LogoText>UniLikes</LogoText>
                 <MenuWrapper>
-                    <Menu mode="horizontal" defaultSelectedKeys={[selectedItem]} onClick={handleChange}>
+                    <Menu mode='horizontal' defaultSelectedKeys={[selectedItem]} onClick={handleChange}>
                         <Menu.Item key={MenuKeys.TEACHER_RATING}>Рейтинг преподавателей</Menu.Item>
                         <Menu.Item key={MenuKeys.PROFILE}>Профиль</Menu.Item>
                         <Menu.Item key={MenuKeys.VOTE}>
@@ -75,11 +77,11 @@ export const HeaderCustom = (): JSX.Element => {
                         <QuestionCircleOutlined />
                     </div>
                     <UserBlock>
-                        <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                        <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
                         <NameText>Name Surname</NameText>
                     </UserBlock>
                     <div>
-                        <Link to="">
+                        <Link to='/login' onClick={handleLogout}>
                             <ExitText>Выход </ExitText>
                         </Link>
                     </div>

@@ -9,6 +9,7 @@ import {
 } from './styles';
 import { LoginForm } from '../../components/LoginForm';
 import { Tabs } from 'antd';
+import { RegisterForm } from '../../components/RegisterForm';
 
 const { TabPane } = Tabs;
 export const Login = (): JSX.Element => {
@@ -31,7 +32,7 @@ export const Login = (): JSX.Element => {
                             <LoginForm />
                         </TabPane>
                         <TabPane tab="Регистрация" key="registration">
-                            Регистрация
+                            <RegisterForm />
                         </TabPane>
                     </Tabs>
                 </TabsWrapper>
