@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import environ
+import sys
 
 env = environ.Env(
     DEBUG=(bool, False)
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'account',
     'voting',
+    'teacher',
     'djoser',
     'rest_framework',
     'rest_framework.authtoken',
@@ -170,3 +172,15 @@ EMAIL_USE_TLS = True
 
 CELERY_BROKER_URL = 'redis://localhost:6379'
 APP_URL = env('APP_URL')
+
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': env('DB_NAME'),
+            'USER': env('DB_USER'),
+            'PASSWORD': env('DB_PASSWORD'),
+            'HOST': env('DB_HOST'),
+            'PORT': env('DB_PORT'),
+        }
+    }

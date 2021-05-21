@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import (
@@ -39,7 +41,7 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(
         max_length=DEFAULT_FIELDS_MAX_LENGTH, unique=True, blank=False)
-    admission_year = models.PositiveSmallIntegerField(blank=True, null=True, unique=False)
+    admission_year = models.PositiveSmallIntegerField(blank=True, null=True, unique=False, default=2018)
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []

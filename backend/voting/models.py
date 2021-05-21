@@ -1,23 +1,9 @@
 from django.db import models
 from account.models import User
-
+from teacher.models import Teacher
 from django.conf import settings
 
 DEFAULT_FIELDS_MAX_LENGTH = settings.DEFAULT_FIELDS_MAX_LENGTH
-
-
-class Teacher(models.Model):
-    username = None
-    name = models.CharField(max_length=DEFAULT_FIELDS_MAX_LENGTH)
-    patronymic = models.CharField(max_length=DEFAULT_FIELDS_MAX_LENGTH)
-    surname = models.CharField(max_length=DEFAULT_FIELDS_MAX_LENGTH)
-    photo_url = models.URLField(null=True,
-                                default='https://secure.gravatar.com/avatar/0fb68a3652b2d19b550a3fca1e71d9cc?s=4729128&d=mm')
-    rating = models.FloatField(null=True)
-    vote_counts = models.PositiveSmallIntegerField(default=0)
-
-    def __str__(self):
-        return f'{self.surname} {self.name} {self.patronymic}'
 
 
 class TeacherSubjectSemester(models.Model):

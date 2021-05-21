@@ -3,7 +3,7 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 
 from .models import Teacher, RateFact
-from .serializers import RateFactSerializer
+from .serializers import RateFactSerializer, NewRateFactSerializer
 
 
 class VotingViewSet(viewsets.ModelViewSet):
@@ -18,23 +18,26 @@ class VotingViewSet(viewsets.ModelViewSet):
             return Teacher.objects.none()
 
     def create(self, request):
-        serializer = RateFactSerializer(data=request.data)
+        serializer = NewRateFactSerializer(data=request.data)
         if serializer.is_valid():
             teacher_id = serializer.data.get('teacher_id')
             rate = serializer.data.get('rate')
             semester = request.user.semester()
             student = request.user
+            print(rate)
             try:
                 teacher = Teacher.objects.get(id=teacher_id)
                 if rate != -1:
                     teacher.vote_counts += 1
-                    teacher.rating = (teacher.rating * teacher.vote_counts + rate) / teacher.vote_counts
+                    teacher.rating = (teacher.rating * teacher.vote_counts + float(rate)) / float(teacher.vote_counts)
                     teacher.save()
                 RateFact.objects.create(student=student, semester=semester, teacher=teacher)
                 return Response(status=status.HTTP_200_OK)
             except Teacher.DoesNotExist:
                 return Response(f'Teacher with id {teacher_id} has not found',
                                 status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None):
         response = {'message': 'Put function is prohibited for voting.'}
