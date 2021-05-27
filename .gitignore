@@ -115,3 +115,8 @@ venv.bak/
 
 frontend/node_modules
 frontend/.idea
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
