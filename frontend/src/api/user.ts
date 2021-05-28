@@ -2,19 +2,25 @@ import { ConfirmResetCredentials, RegisterCredentials, ResetCredentials, User, U
 import { apiClient } from './client';
 import { AxiosResponse } from 'axios';
 import { message } from 'antd';
-import { makeRequestAndHandleError } from './helpers';
+import { isSuccessful, makeRequestAndHandleError } from './helpers';
 import { ResponseResult } from './types';
-import { getEmail, setCurrentUser, setEmail } from '../utils';
+import { getEmail, setCurrentAccount, setCurrentUser, setEmail } from '../utils';
 
-export const authorize = (userCredentials: UserCredentials): Promise<ResponseResult<User>> => {
-    return makeRequestAndHandleError<User>(() => apiClient.post('auth/token/login/', userCredentials))
+export const authorize = (userCredentials: UserCredentials): void => {
+    apiClient.post('auth/token/login/', userCredentials).then(
+        (response: AxiosResponse) => {
+            setCurrentUser(response?.data);
+            apiClient.setAuthHeader(response?.data?.auth_token);
+            userInfo();
+        },
+    );
 };
 
 export const register = (userCredentials: RegisterCredentials): void => {
     apiClient.post('auth/users/', userCredentials)
         .then((response: AxiosResponse) => {
             setEmail(response?.data.email);
-            return response
+            return response;
         })
         .catch(() => {
             message.error('Error with register');
@@ -23,8 +29,10 @@ export const register = (userCredentials: RegisterCredentials): void => {
 // export const register = (userCredentials: RegisterCredentials): Promise<ResponseResult<string>> => {
 //     return makeRequestAndHandleError<string>(() => apiClient.post('auth/users/', userCredentials));
 // };
-export const logout = (): Promise<ResponseResult<User>> => {
-    return makeRequestAndHandleError<User>(() => apiClient.post('auth/token/logout/', {}));
+export const logout = (): void => {
+    apiClient.post('auth/token/logout/', {})
+    localStorage.clear()
+    apiClient.removeAuthHeader()
 };
 export const resendEmail = (): Promise<ResponseResult<User>> => {
     const email = getEmail();
@@ -58,9 +66,9 @@ export const activate = (uid: string, token: string): Promise<ResponseResult<Use
 export const userInfo = (): void => {
     apiClient.get('auth/users/me/')
         .then((response: AxiosResponse) => {
-            const user: User = response.data;
+            const user: Account = response.data;
             console.log(user);
-            setCurrentUser(user);
+            setCurrentAccount(user);
         })
         .catch(() => {
             message.error('Error with getting user info');

@@ -3,9 +3,10 @@ import { Avatar, Badge, Layout, Table, Tag } from 'antd';
 import { HeaderCustom } from '../../components/Header';
 import { ColumnsType } from 'antd/lib/table';
 import { Teacher } from '../../types/teacher';
-import { teachers } from '../../mock/teachers';
 import { getRatingStatus } from '../../utils/ratingStatus';
 import { InfoBlock, PageHeaderText, StyledAlert, StyledContent, StyledPageHeader } from './styles';
+import { getTeachers } from '../../api';
+import { getCurrentTeachers } from '../../utils';
 
 export const Main = (): JSX.Element => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -18,8 +19,8 @@ export const Main = (): JSX.Element => {
                     title: 'Фото',
                     dataIndex: 'photo',
                     width: '5%',
-                    render: function renderAvatar(value) {
-                        return <Avatar src={value} />;
+                    render: function renderAvatar(value, record) {
+                        return <Avatar src={record.photo_url} />;
                     },
                 },
                 {
@@ -29,7 +30,7 @@ export const Main = (): JSX.Element => {
                     render: function renderName(value, record) {
                         return (
                             <p>
-                                {record.surname} {record.name} {record.middleName}
+                                {record.surname} {record.name} {record.patronymic}
                             </p>
                         );
                     },
@@ -67,10 +68,6 @@ export const Main = (): JSX.Element => {
                     },
                     sorter: (a, b) => a.rating - b.rating,
                 },
-                {
-                    title: 'Последняя оценка',
-                    dataIndex: 'lastVote',
-                },
             ] as ColumnsType<Teacher>,
         [],
     );
@@ -78,7 +75,8 @@ export const Main = (): JSX.Element => {
         async function getData() {
             setLoading(true);
             await setTimeout(() => {
-                setData(teachers);
+                getTeachers();
+                setData(getCurrentTeachers() ?? []);
                 setLoading(false);
             }, 500);
         }

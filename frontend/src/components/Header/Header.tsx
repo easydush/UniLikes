@@ -15,6 +15,9 @@ import {
     UserBlock,
 } from './styles';
 import { logout } from '../../api';
+import { useStore } from 'react-redux';
+import { getCurrentAccount, getCurrentUser } from '../../utils';
+
 enum MenuKeys {
     VOTE = 'vote',
     PROFILE = 'profile',
@@ -59,6 +62,8 @@ export const HeaderCustom = (): JSX.Element => {
         return MenuKeys.TEACHER_RATING;
     }, [urlName]);
 
+    const user = getCurrentAccount();
+
     return (
         <StyledHeader>
             <HeaderWrapper>
@@ -66,7 +71,7 @@ export const HeaderCustom = (): JSX.Element => {
                 <MenuWrapper>
                     <Menu mode='horizontal' defaultSelectedKeys={[selectedItem]} onClick={handleChange}>
                         <Menu.Item key={MenuKeys.TEACHER_RATING}>Рейтинг преподавателей</Menu.Item>
-                        <Menu.Item key={MenuKeys.PROFILE}>Профиль</Menu.Item>
+                        {/*<Menu.Item key={MenuKeys.PROFILE}>Профиль</Menu.Item>*/}
                         <Menu.Item key={MenuKeys.VOTE}>
                             <Badge dot>Голосовать</Badge>
                         </Menu.Item>
@@ -78,7 +83,7 @@ export const HeaderCustom = (): JSX.Element => {
                     </div>
                     <UserBlock>
                         <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                        <NameText>Name Surname</NameText>
+                        <NameText>{user?.name}</NameText>
                     </UserBlock>
                     <div>
                         <Link to='/login' onClick={handleLogout}>

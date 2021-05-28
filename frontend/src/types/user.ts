@@ -9,6 +9,7 @@ export const EmptyUser: User = {
 export type Account = {
   name: string,
   email: string,
+  semester: number,
 };
 
 export type UserCredentials = {

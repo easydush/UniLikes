@@ -1,12 +1,10 @@
 import { Form, Input } from 'antd';
 import { makeRequiredFormFieldRule } from '../../utils/formRules';
 import React, { useCallback, useState } from 'react';
-import { apiClient, authorize, userInfo } from '../../api';
-import { getCurrentUser, setAccessKey, setCurrentUser } from '../../utils';
+import { authorize } from '../../api';
 import { LockIcon, SubmitButton, UserIcon } from './styles';
 import { useHistory } from 'react-router-dom';
 import { Routes as R } from '../../constants';
-import { isSuccessful } from '../../api/helpers';
 
 export const LoginForm = (): JSX.Element => {
 
@@ -15,13 +13,9 @@ export const LoginForm = (): JSX.Element => {
 
     const handleFinish = useCallback(async (values) => {
         setLoading(true);
-        const response = await authorize(values);
-        if (isSuccessful(response)) {
-            setCurrentUser(response.data);
-        }
-        // await userInfo();
-        history.push(R.ROOT)
+        await authorize(values);
         setLoading(false);
+        history.push(R.ROOT)
     }, [history]);
 
     return (

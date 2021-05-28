@@ -1,9 +1,9 @@
 export interface Teacher {
-    photo: string;
+    id: number;
     name: string;
     surname: string;
-    middleName: string;
+    patronymic: string;
     subjects: string[];
     rating: number;
-    lastVote: string;
+    photo_url: string;
 }
