@@ -6,7 +6,7 @@ import { message } from 'antd';
 export function transformResponse<TData = any>(responseData: any, status?: number): ResponseResult<TData> {
     let result: ResponseResult<TData>;
     //todo fix add status and data to response
-    if (status === 200) {
+    if (status === 200 || status === 204) {
         result = {
             success: true,
             data: responseData ?? null,
