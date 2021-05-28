@@ -6,4 +6,4 @@ from .models import User
 class UserInfoSerializer(UserSerializer):
     class Meta(UserSerializer):
         model = User
-        fields = ('email', 'admission_year')
+        fields = ('email', 'semester', 'name')

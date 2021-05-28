@@ -7,7 +7,7 @@ DEFAULT_FIELDS_MAX_LENGTH = settings.DEFAULT_FIELDS_MAX_LENGTH
 
 
 class TeacherSubjectSemester(models.Model):
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='subjects_semesters')
     subject = models.CharField(max_length=DEFAULT_FIELDS_MAX_LENGTH)
     semester = models.PositiveSmallIntegerField(default=0)
 

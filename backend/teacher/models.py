@@ -1,6 +1,5 @@
 from django.db import models
 
-
 # Create your models here.
 from UniLikes.settings import DEFAULT_FIELDS_MAX_LENGTH
 

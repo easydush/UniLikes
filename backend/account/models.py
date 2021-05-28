@@ -48,8 +48,11 @@ class User(AbstractUser):
 
     objects = UserManager()
 
-    def __str__(self):
-        return f'{self.admission_year} {self.email[:self.email.index("@")]}'
-
     def semester(self):
         return get_semester(self.admission_year)
+
+    def name(self):
+        return f'{self.email[:self.email.index("@")]}'
+
+    def __str__(self):
+        return f'{self.admission_year} {self.name}'
