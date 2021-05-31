@@ -2,18 +2,24 @@ from django.db.models import Q
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 
-from .models import Teacher, RateFact
+from .models import RateFact
 from .serializers import RateFactSerializer, NewRateFactSerializer
+from teacher.models import Teacher
+
+from account.utils import get_semester
+
+from teacher.serializers import TeacherSerializer
 
 
 class VotingViewSet(viewsets.ModelViewSet):
-    serializer_class = Teacher
+    serializer_class = TeacherSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         if self.request.user:
-            return Teacher.objects.filter(teachersubjectsemester__semester=self.request.user.semester).exclude(
-                Q(ratefact__student=self.request.user) & Q(ratefact__semester=self.request.user.semester))
+            semester = get_semester(self.request.user.admission_year)
+            return Teacher.objects.filter(Q(subjects_semesters__semester=semester) &
+                                          ~Q(ratefact__student=self.request.user) & ~Q(ratefact__semester=semester))
         else:
             return Teacher.objects.none()
 
@@ -24,7 +30,6 @@ class VotingViewSet(viewsets.ModelViewSet):
             rate = serializer.data.get('rate')
             semester = request.user.semester()
             student = request.user
-            print(rate)
             try:
                 teacher = Teacher.objects.get(id=teacher_id)
                 if rate != -1:
