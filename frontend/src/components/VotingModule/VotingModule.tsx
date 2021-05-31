@@ -1,21 +1,24 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { VoteTeacher } from '../../types/vote';
-import { votingTeacher } from '../../mock/voting';
 import { Spin } from 'antd';
 import { LoadingWrapper } from './styles';
 import { StyledAlert } from '../../pages/Main/styles';
 import { VoteCard } from '../VoteCard';
+import { getUnvotedTeachers } from '../../utils';
+import { Teacher } from '../../types/teacher';
+import { fetchUnvotedTeachers, getTeachers } from '../../api';
 
 export const VotingModule = (): JSX.Element => {
     const [loading, setLoading] = useState<boolean>(false);
-    const [data, setData] = useState<VoteTeacher[]>();
+    const [data, setData] = useState<Teacher[]>();
     const [currentIndex, setCurrentIndex] = useState<number>(0);
 
     useEffect(() => {
         async function getData() {
+            fetchUnvotedTeachers()
             setLoading(true);
+            console.log()
             await setTimeout(() => {
-                setData(votingTeacher);
+                setData(getUnvotedTeachers() ?? []);
                 //setData([]);
                 setLoading(false);
             }, 2000);
@@ -32,9 +35,9 @@ export const VotingModule = (): JSX.Element => {
         if (data && currentIndex < data.length) {
             return (
                 <VoteCard
-                    photo={data[currentIndex]?.photo}
+                    photo={data[currentIndex]?.photo_url}
                     name={data[currentIndex]?.name}
-                    subject={data[currentIndex]?.subject}
+                    subjects={data[currentIndex]?.subjects}
                     onClick={onClickHandler}
                 />
             );
@@ -44,12 +47,12 @@ export const VotingModule = (): JSX.Element => {
 
     return (
         <LoadingWrapper>
-            {(!data || loading) && <Spin size="large" />}
+            {(!data || loading) && <Spin size='large' />}
             {(data?.length === 0 || currentIndex >= (data?.length ?? 1)) && (
                 <StyledAlert
-                    message="Информация"
-                    description="Нет преподавателей для голосования"
-                    type="info"
+                    message='Информация'
+                    description='Нет преподавателей для голосования'
+                    type='info'
                     showIcon
                 />
             )}

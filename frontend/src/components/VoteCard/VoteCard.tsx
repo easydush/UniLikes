@@ -6,11 +6,11 @@ import { NegativeButton, NeutralButton, PositiveButton } from './styles';
 interface VoteCardProps {
     photo?: string;
     name?: string;
-    subject?: string;
+    subjects?: string[];
     onClick: (event: MouseEvent) => void;
 }
 
-export const VoteCard = ({ photo, name, subject, onClick }: VoteCardProps): JSX.Element => {
+export const VoteCard = ({ photo, name, subjects, onClick }: VoteCardProps): JSX.Element => {
     const onNegativeClick = useCallback(
         (event) => {
             onClick(event);
@@ -51,7 +51,7 @@ export const VoteCard = ({ photo, name, subject, onClick }: VoteCardProps): JSX.
                 </PositiveButton>,
             ]}
         >
-            <Meta title={name ? name : ''} description={subject ? subject : ''} />
+            <Meta title={name ? name : ''} description={subjects ? subjects : []} />
         </Card>
     );
 };

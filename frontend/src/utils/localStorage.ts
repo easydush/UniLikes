@@ -7,6 +7,7 @@ export enum localStorageKeys {
     ACCESS_KEY = 'access_key',
     ACCOUNT = 'account',
     EMAIL = 'email',
+    UNVOTED_TEACHERS = 'unvoted_teachers',
     TEACHERS = 'teachers',
 }
 
@@ -46,5 +47,13 @@ export const setTeachers = (teachers: Teacher[]): void => {
 };
 export const getCurrentTeachers = (): Teacher[] | null => {
     const teachers: string | null = localStorage.getItem(localStorageKeys.TEACHERS);
+    return !isNil(teachers) ? JSON.parse(teachers) : null;
+};
+
+export const setUnvotedTeachers = (teachers: Teacher[]): void => {
+    localStorage.setItem(localStorageKeys.UNVOTED_TEACHERS, JSON.stringify(teachers));
+};
+export const getUnvotedTeachers = (): Teacher[] | null => {
+    const teachers: string | null = localStorage.getItem(localStorageKeys.UNVOTED_TEACHERS);
     return !isNil(teachers) ? JSON.parse(teachers) : null;
 };

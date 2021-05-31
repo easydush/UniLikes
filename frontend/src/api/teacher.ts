@@ -6,7 +6,6 @@ import { setTeachers } from '../utils';
 export const getTeachers = (): void => {
     apiClient.get('teacher/', {})
         .then((response: AxiosResponse) => {
-            console.log(response?.data?.results);
             setTeachers(response?.data?.results);
         })
         .catch(() => {
