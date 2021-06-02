@@ -19,7 +19,7 @@ class VotingViewSet(viewsets.ModelViewSet):
         if self.request.user:
             semester = get_semester(self.request.user.admission_year)
             return Teacher.objects.filter(Q(subjects_semesters__semester=semester) &
-                                          ~Q(ratefact__student=self.request.user) & ~Q(ratefact__semester=semester))
+                                          ~Q(ratefact__student=self.request.user, ratefact__semester=semester))
         else:
             return Teacher.objects.none()
 
