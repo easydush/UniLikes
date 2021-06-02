@@ -51,6 +51,10 @@ class ApiClient {
     setAuthHeader(token: string): void {
         this.instance.defaults.headers.Authorization = `Token ${token}`;
     }
+
+    removeAuthHeader(): void {
+        this.instance.defaults.headers.Authorization = '';
+    }
 }
 
 export const apiClient = new ApiClient();
