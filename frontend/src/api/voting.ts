@@ -1,17 +1,16 @@
-import { RegisterCredentials } from '../types';
 import { apiClient } from './client';
 import { AxiosResponse } from 'axios';
-import { setEmail, setUnvotedTeachers } from '../utils';
+import { setUnvotedTeachers } from '../utils';
 import { message } from 'antd';
+import { VoteCredentials } from '../types/vote';
 
-export const vote = (userCredentials: RegisterCredentials): void => {
-    apiClient.post('auth/users/', userCredentials)
+export const vote = (voteCredentials: VoteCredentials): void => {
+    apiClient.post('voting/', voteCredentials)
         .then((response: AxiosResponse) => {
-            setEmail(response?.data.email);
             return response;
         })
         .catch(() => {
-            message.error('Error with register');
+            message.error('Error with voting');
         });
 };
 export const fetchUnvotedTeachers = (): void => {

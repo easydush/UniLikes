@@ -5,7 +5,7 @@ import { StyledAlert } from '../../pages/Main/styles';
 import { VoteCard } from '../VoteCard';
 import { getUnvotedTeachers } from '../../utils';
 import { Teacher } from '../../types/teacher';
-import { fetchUnvotedTeachers, getTeachers } from '../../api';
+import { fetchUnvotedTeachers } from '../../api';
 
 export const VotingModule = (): JSX.Element => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -16,7 +16,6 @@ export const VotingModule = (): JSX.Element => {
         async function getData() {
             fetchUnvotedTeachers()
             setLoading(true);
-            console.log()
             await setTimeout(() => {
                 setData(getUnvotedTeachers() ?? []);
                 //setData([]);
@@ -39,6 +38,7 @@ export const VotingModule = (): JSX.Element => {
                     name={data[currentIndex]?.name}
                     subjects={data[currentIndex]?.subjects}
                     onClick={onClickHandler}
+                    id={data[currentIndex]?.id}
                 />
             );
         }

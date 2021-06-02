@@ -2,19 +2,25 @@ import React, { useCallback } from 'react';
 import { Card, message } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import { NegativeButton, NeutralButton, PositiveButton } from './styles';
+import { vote } from '../../api';
 
 interface VoteCardProps {
+    id: number;
     photo?: string;
     name?: string;
     subjects?: string[];
     onClick: (event: MouseEvent) => void;
 }
 
-export const VoteCard = ({ photo, name, subjects, onClick }: VoteCardProps): JSX.Element => {
+export const VoteCard = ({ id, photo, name, subjects, onClick }: VoteCardProps): JSX.Element => {
     const onNegativeClick = useCallback(
         (event) => {
             onClick(event);
-            message.error('Очень жаль', 2)
+            vote({
+                teacher_id: id,
+                rate: -1
+            });
+            message.error('Очень жаль...', 2)
         },
         [onClick],
     );
@@ -22,6 +28,10 @@ export const VoteCard = ({ photo, name, subjects, onClick }: VoteCardProps): JSX
     const onNeutralClick = useCallback(
         (event) => {
             onClick(event);
+            vote({
+                teacher_id: id,
+                rate: -1
+            });
             message.warn('Нормально', 2)
         },
         [onClick],
@@ -30,14 +40,18 @@ export const VoteCard = ({ photo, name, subjects, onClick }: VoteCardProps): JSX
     const onPositiveClick = useCallback(
         (event) => {
             onClick(event);
-            message.success('Отлично', 2)
+            vote({
+                teacher_id: id,
+                rate: 1
+            });
+            message.success('Отлично!', 2)
         },
         [onClick],
     );
 
     return (
         <Card
-            style={{ width: '30%' }}
+            style={{ width: '38%' }}
             cover={<img alt="example" src={photo ? photo : ''} />}
             actions={[
                 <NegativeButton key="negative" onClick={onNegativeClick}>
@@ -51,7 +65,7 @@ export const VoteCard = ({ photo, name, subjects, onClick }: VoteCardProps): JSX
                 </PositiveButton>,
             ]}
         >
-            <Meta title={name ? name : ''} description={subjects ? subjects : []} />
+            <Meta title={name ? name : ''} description={subjects ? subjects.join(', ') : []} />
         </Card>
     );
 };

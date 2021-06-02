@@ -4,3 +4,7 @@ export interface VoteTeacher {
     photo: string;
     subject: string;
 }
+export type VoteCredentials = {
+    teacher_id: number,
+    rate: number,
+}
