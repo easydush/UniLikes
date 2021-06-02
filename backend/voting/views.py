@@ -28,7 +28,7 @@ class VotingViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             teacher_id = serializer.data.get('teacher_id')
             rate = serializer.data.get('rate')
-            semester = request.user.semester()
+            semester = get_semester(request.user.admission_year)
             student = request.user
             try:
                 teacher = Teacher.objects.get(id=teacher_id)

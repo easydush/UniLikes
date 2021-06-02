@@ -22,5 +22,4 @@ class NewRateFactSerializer(ModelSerializer):
 
     class Meta:
         model = RateFact
-        exclude = ['teacher', 'student']
-        include = ['teacher_id', 'rate']
+        fields = ['teacher_id', 'rate']
