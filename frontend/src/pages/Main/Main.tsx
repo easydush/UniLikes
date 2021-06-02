@@ -62,7 +62,7 @@ export const Main = (): JSX.Element => {
                         return (
                             <p>
                                 {' '}
-                                <Badge status={getRatingStatus(value)} /> {value}
+                                <Badge status={getRatingStatus(value)} /> {value}%
                             </p>
                         );
                     },
