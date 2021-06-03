@@ -1,12 +1,9 @@
+import logging
+
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from .models import Teacher, TeacherSubjectSemester, RateFact
-
-
-class TeacherInfoSerializer(ModelSerializer):
-    class Meta:
-        model = Teacher
-        fields = ('id', 'surname', 'name', 'patronymic', 'photo_url', 'rating')
+from .models import TeacherSubjectSemester, RateFact
 
 
 class TeacherSubjectSemesterInfoSerializer(ModelSerializer):
@@ -19,3 +16,12 @@ class RateFactSerializer(ModelSerializer):
     class Meta:
         model = RateFact
         fields = '__all__'
+
+
+class NewRateFactSerializer(ModelSerializer):
+    teacher_id = serializers.IntegerField()
+    rate = serializers.IntegerField()
+
+    class Meta:
+        model = RateFact
+        fields = ['teacher_id', 'rate']

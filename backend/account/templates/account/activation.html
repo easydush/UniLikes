@@ -16,11 +16,10 @@
 {% endblock text_body %}
 
 {% block html_body %}
-<p>{% blocktrans %}Вы получили это сообщение потому что зарегестрировались на сайте {{ site_name }}.{% endblocktrans
-    %}</p>
+<p>{% blocktrans %}Вы получили это сообщение потому что зарегестрировались на сайте {{ site_name }}.{% endblocktrans %}</p>
 
 <p>{% trans "Пожалуйста, пройдите по ссылке ниже, чтобы активировать аккаунт:" %}</p>
-<p><a href="{{ protocol }}://{{ domain }}/{{ url|safe }}">{{ protocol }}://{{ domain }}/{{ url|safe }}</a></p>
+<p><a href="{{ protocol }}://localhost:3000/{{ url|safe }}">{{ protocol }}://localhost:3000/{{ url|safe }}</a></p>
 
 
 <p>{% trans "С наилучшими пожеланиями," %}</p>

@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import (
@@ -17,7 +19,7 @@ class UserManager(BaseUserManager):
             raise ValueError('The Email must be set')
         email = self.normalize_email(email)
         if not email.endswith('kpfu.ru'):
-            raise ValueError('The Email should be in kpfu domain')
+            raise ValueError('The Email should be in kpfu.ru domain')
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
@@ -36,18 +38,21 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    """
+        Student model, able to vote.
+    """
     username = None
     email = models.EmailField(
         max_length=DEFAULT_FIELDS_MAX_LENGTH, unique=True, blank=False)
-    admission_year = models.PositiveSmallIntegerField(blank=True, null=True, unique=False)
+    admission_year = models.PositiveSmallIntegerField(blank=True, null=True, unique=False, default=2018)
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = UserManager()
 
-    def __str__(self):
-        return f'{self.admission_year} {self.email[:self.email.index("@")]}'
+    def name(self):
+        return f'{self.email[:self.email.index("@")]}'
 
-    def semester(self):
-        return get_semester(self.admission_year)
+    def __str__(self):
+        return f'{self.admission_year} {self.email}'

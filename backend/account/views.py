@@ -1,3 +1,3 @@
 from django.shortcuts import render
 
-# Create your views here.
+# No views here, because of djoser. See documentation: https://djoser.readthedocs.io/en/latest/
