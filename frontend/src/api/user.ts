@@ -2,7 +2,7 @@ import { ConfirmResetCredentials, RegisterCredentials, ResetCredentials, User, U
 import { apiClient } from './client';
 import { AxiosResponse } from 'axios';
 import { message } from 'antd';
-import { isSuccessful, makeRequestAndHandleError } from './helpers';
+import { makeRequestAndHandleError } from './helpers';
 import { ResponseResult } from './types';
 import { getEmail, setCurrentAccount, setCurrentUser, setEmail } from '../utils';
 
