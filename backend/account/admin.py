@@ -5,6 +5,9 @@ from .models import User
 
 
 class UserAdmin(BaseUserAdmin):
+    """
+        User administration settings.
+    """
     model = User
     list_display = ('email', 'admission_year', 'is_staff', 'is_active',)
     list_filter = ('email', 'admission_year', 'is_staff', 'is_active',)

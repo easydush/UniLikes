@@ -38,6 +38,9 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    """
+        Student model, able to vote.
+    """
     username = None
     email = models.EmailField(
         max_length=DEFAULT_FIELDS_MAX_LENGTH, unique=True, blank=False)

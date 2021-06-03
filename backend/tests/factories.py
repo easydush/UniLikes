@@ -6,7 +6,12 @@ from teacher.models import Teacher
 
 
 class UserFactory(DjangoModelFactory):
-    email = Faker('email')
+    """
+        Creating user for test methods.
+        :param DjangoModelFactory: linking to django model (look for the FactoryBoy Docs)
+    """
+    email = Faker('email').evaluate(None, None, extra={'locale': None})
+    email = f'{email[:email.index("@")]}@stud.kpfu.ru'
     is_superuser = False
     is_active = True
     is_staff = False
@@ -30,6 +35,10 @@ class UserFactory(DjangoModelFactory):
 
 
 class TeacherFactory(DjangoModelFactory):
+    """
+        Creating teacher for test methods.
+        :param DjangoModelFactory: linking to django model (look for the FactoryBoy Docs)
+    """
     name = Faker('name')
     surname = Faker('name')
     patronymic = Faker('name')

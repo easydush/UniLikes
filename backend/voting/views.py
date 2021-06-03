@@ -12,10 +12,16 @@ from teacher.serializers import TeacherSerializer
 
 
 class VotingViewSet(viewsets.ModelViewSet):
+    """
+        ViewSet for getting teachers to vote and adding votes.
+    """
     serializer_class = TeacherSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        """
+               ViewSet for getting teachers to vote and adding votes.
+        """
         if self.request.user:
             semester = get_semester(self.request.user.admission_year)
             return Teacher.objects.filter(Q(subjects_semesters__semester=semester) &

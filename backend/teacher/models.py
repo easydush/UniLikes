@@ -1,16 +1,18 @@
 from django.db import models
 
-# Create your models here.
-from UniLikes.settings import DEFAULT_FIELDS_MAX_LENGTH
+from UniLikes.settings import DEFAULT_FIELDS_MAX_LENGTH, DEFAULT_AVATAR
 
 
 class Teacher(models.Model):
+    """
+        Teacher for voting. Can be added by admin only.
+    """
     username = None
     name = models.CharField(max_length=DEFAULT_FIELDS_MAX_LENGTH)
     patronymic = models.CharField(max_length=DEFAULT_FIELDS_MAX_LENGTH)
     surname = models.CharField(max_length=DEFAULT_FIELDS_MAX_LENGTH)
     photo_url = models.URLField(null=True,
-                                default='https://secure.gravatar.com/avatar/0fb68a3652b2d19b550a3fca1e71d9cc?s=4729128&d=mm')
+                                default=DEFAULT_AVATAR)
     rating = models.FloatField(default=0)
     vote_counts = models.PositiveSmallIntegerField(default=0)
 

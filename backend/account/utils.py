@@ -2,6 +2,9 @@ import datetime as dt
 
 
 def get_semester(adm_year):
+    """
+       Method for calculating current semester for user. Used in voting.
+    """
     today = dt.datetime.today().date()
     adm_day = dt.date(adm_year, 9, 1)
     delta = today - adm_day

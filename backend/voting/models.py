@@ -7,6 +7,9 @@ DEFAULT_FIELDS_MAX_LENGTH = settings.DEFAULT_FIELDS_MAX_LENGTH
 
 
 class TeacherSubjectSemester(models.Model):
+    """
+       Model for linking teacher with subjects.
+    """
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='subjects_semesters')
     subject = models.CharField(max_length=DEFAULT_FIELDS_MAX_LENGTH)
     semester = models.PositiveSmallIntegerField(default=0)
@@ -16,8 +19,9 @@ class TeacherSubjectSemester(models.Model):
 
 
 class RateFact(models.Model):
-    """Sounds bad, but this model is a guarantee for anonymous voting and defends user from
-    repeating vote. It's not linked to Rate, because of anonymous."""
+    """
+        Model for committing vote. It's not linked to concrete rate, that's why it is anonymous.
+    """
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     semester = models.PositiveSmallIntegerField(default=0)

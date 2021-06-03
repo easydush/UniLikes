@@ -184,3 +184,4 @@ if 'test' in sys.argv:
             'PORT': env('DB_PORT'),
         }
     }
+DEFAULT_AVATAR = 'https://secure.gravatar.com/avatar/0fb68a3652b2d19b550a3fca1e71d9cc?s=4729128&d=mm'
